@@ -9,3 +9,4 @@ var dataList = [
     { id: 5, nameBranch: 'Porto', longitude: -8.6291050, latitude: 41.1579440},
     { id: 5, nameBranch: 'Stuttgart', longitude: 9.1829320, latitude: 48.7758460},
     { id: 5, nameBranch: 'Paris', longitude: 2.3522220, latitude: 48.8566140}
+  ]
