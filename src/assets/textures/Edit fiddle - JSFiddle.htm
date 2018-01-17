@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://jsfiddle.net/SkyBurchard/7Lgm5/7/ -->
+<html slick-uniqueid="3" class="gr__jsfiddle_net"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="description" content="Test your JavaScript, CSS, HTML or CoffeeScript online with JSFiddle code editor.">
+    <meta name="keywords" content="online javascript editor, testing javascript online, online ide, online code editor, html, css, coffeescript, scss online editor">
+    <meta name="author" content="JSFiddle">
+    <meta name="copyright" content="share alike">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+
+    
+      <meta name="robots" content="index, follow">
+      <meta name="googlebot" content="index, follow">
+    
+
+    
+
+    
+      <meta name="google-site-verification" content="9m4aWTtDLfQ1kJNm3NtNsCrtpsOx_QoOPQRJ7jAwup8">
+    
+
+    <script async="" src="./Edit fiddle - JSFiddle_files/analytics.js"></script><script>
+      var PanelValues = {
+        html: "\u003Cscript src\u003D\u0022http://threejs.org/build/three.min.js\u0022\u003E\u003C/script\u003E\u000A\u003Cscript src\u003D\u0022http://threejs.org/examples/js/controls/OrbitControls.js\u0022\u003E\u003C/script\u003E\u000A\u003Cdiv id\u003D\u0027container\u0027\u003E\u003C/div\u003E",
+        js:   "        var container\u003B\u000A        var camera, controls, scene, renderer\u003B\u000A\u000A        init()\u003B\u000A        animate()\u003B\u000A\u000A        function init() {\u000A\u000A            camera \u003D new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000)\u003B\u000A            camera.position.z \u003D 1000\u003B\u000A\u000A            controls \u003D new THREE.OrbitControls(camera)\u003B\u000A\u000A            controls.rotateSpeed \u003D 1.0\u003B\u000A            controls.zoomSpeed \u003D 1.2\u003B\u000A            controls.panSpeed \u003D 0.8\u003B\u000A\u000A            controls.noZoom \u003D false\u003B\u000A            controls.noPan \u003D false\u003B\u000A\u000A            controls.staticMoving \u003D true\u003B\u000A            controls.dynamicDampingFactor \u003D 0.3\u003B\u000A\u000A            controls.keys \u003D [65, 83, 68]\u003B\u000A\u000A            controls.addEventListener(\u0027change\u0027, render)\u003B\u000A\u000A            // world\u000A\u000A            scene \u003D new THREE.Scene()\u003B\u000A            sceneTarget \u003D new THREE.Scene()\u003B\u000A\u000A            var testObject_G \u003D new THREE.CubeGeometry(100, 100, 5)\u003B\u000A            var testObject_M \u003D new THREE.MeshBasicMaterial({\u000A                color: 0xBBBBBB\u000A            })\u003B\u000A            var testObject_Mesh \u003D new THREE.Mesh(testObject_G, testObject_M)\u003B\u000A            testObject_Mesh.position.x \u003D \u002D150\u003B\u000A            scene.add(testObject_Mesh)\u003B\u000A            var testObject_Mesh2 \u003D new THREE.Mesh(testObject_G, testObject_M)\u003B\u000A            testObject_Mesh2.position.x \u003D 0\u003B\u000A            scene.add(testObject_Mesh2)\u003B\u000A            var testObject_Mesh3 \u003D new THREE.Mesh(testObject_G, testObject_M)\u003B\u000A            testObject_Mesh3.position.x \u003D 150\u003B\u000A            scene.add(testObject_Mesh3)\u003B\u000A\u000A            var targetObject_G \u003D new THREE.SphereGeometry( 5 )\u003B\u000A            var targetObgect_M \u003D new THREE.MeshBasicMaterial({\u000A                color: 0xff0000\u000A            })\u003B\u000A            \u000A            var targetMesh \u003D new THREE.Mesh(targetObject_G, targetObgect_M)\u003B\u000A            targetMesh.position.set( 0, 200, \u002D200 )\u003B\u000A            sceneTarget.add(targetMesh)\u003B\u000A            \u000A            // renderer\u000A\u000A            renderer \u003D new THREE.WebGLRenderer({\u000A                antialias: true\u000A            })\u003B\u000A            renderer.setSize(window.innerWidth, window.innerHeight)\u003B\u000A            renderer.autoClear \u003D false\u003B\u000A            renderer.setClearColor(0xffffff, 1)\u003B\u000A            container \u003D document.getElementById(\u0027container\u0027)\u003B\u000A            container.appendChild(renderer.domElement)\u003B\u000A\u000A\u000A\u000A            //\u000A\u000A            window.addEventListener(\u0027resize\u0027, onWindowResize, false)\u003B\u000A\u000A        }\u000A\u000A        function onWindowResize() {\u000A\u000A            camera.aspect \u003D window.innerWidth / window.innerHeight\u003B\u000A            camera.updateProjectionMatrix()\u003B\u000A\u000A            renderer.setSize(window.innerWidth, window.innerHeight)\u003B\u000A\u000A            controls.handleResize()\u003B\u000A\u000A            render()\u003B\u000A\u000A        }\u000A\u000A        function animate() {\u000A\u000A            requestAnimationFrame(animate)\u003B\u000A            controls.update()\u003B\u000A\u000A        }\u000A\u000A        function render() {\u000A\u000A            renderer.render(scene, camera)\u003B\u000A            renderer.render(sceneTarget, camera)\u003B\u000A            castRays()\u003B\u000A\u000A        }\u000A\u000A        function castRays() {\u000A            \u000A            // rays\u000A\u000A            var direction \u003D new THREE.Vector3(0, 200, \u002D200)\u003B\u000A            \u000A            var startPoint \u003D camera.position.clone()\u003B\u000A            \u000A            var directionVector \u003D direction.sub( startPoint )\u003B\u000A\u000A            var ray \u003D new THREE.Raycaster(startPoint, directionVector.clone(). normalize())\u003B\u000A            \u000A            scene.updateMatrixWorld()\u003B // required, since you haven\u0027t rendered yet\u000A            \u000A            var rayIntersects \u003D ray.intersectObjects(scene.children, true)\u003B\u000A            \u000A            if (rayIntersects[0] \u0026\u0026 rayIntersects[0].distance \u003C directionVector.length()) {\u000A                console.log(rayIntersects[0])\u003B\u000A\u000A                var material \u003D new THREE.LineBasicMaterial({\u000A                  color: 0x0000ff\u000A                })\u003B\u000A                var geometry \u003D new THREE.Geometry()\u003B\u000A                geometry.vertices.push(new THREE.Vector3(ray.ray.origin.x, ray.ray.origin.y, ray.ray.origin.z))\u003B\u000A                geometry.vertices.push(new THREE.Vector3(0, 200, \u002D200))\u003B\u000A                var line \u003D new THREE.Line(geometry, material)\u003B\u000A                sceneTarget.add( line )\u003B\u000A                \u000A            }\u000A            \u000A        }",
+        css:  ""
+      };
+
+      var PanelRender = function(){
+        return " \
+        <iframe name='result' \
+          allow='midi; geolocation; microphone; camera' \
+          sandbox='allow-forms allow-scripts allow-same-origin allow-modals allow-popups' \
+          allowfullscreen allowpaymentreqeust frameBorder='0' \
+           src='//fiddle.jshell.net/SkyBurchard/7Lgm5/7/show/'></iframe> \
+        "
+      };
+    </script>
+
+    <!--meta name="viewport" content="width=device-width, maximum-scale=0.5" /-->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+
+    
+      <script type="text/javascript" src="./Edit fiddle - JSFiddle_files/_dist-editor.js"></script>
+
+    
+    
+
+    
+      <link id="editor-theme" rel="stylesheet" type="text/css" href="./Edit fiddle - JSFiddle_files/dist-editor-dark.css">
+
+    
+
+    
+      <link id="" rel="stylesheet" type="text/css" href="./Edit fiddle - JSFiddle_files/light.css">
+
+    
+
+    
+      <script type="text/javascript">
+        var fiddleOptions = {
+          example_id: "78330880",
+          exampleURL: "//jsfiddle.net/SkyBurchard/7Lgm5/7/",
+          slug:       "7Lgm5",
+          userId:     "None"
+        };
+
+        var csspath         = "/css/",
+          jspath            = "/js/",
+          imgpath           = "/img/",
+          mediapath         = "/mooshellmedia/",
+          codemirrorpath    = "/codemirror/",
+          panel_html        = 'html',
+          panel_css         = 'css',
+          panel_js          = 'javascript',
+          makefavouritepath = "/_make_favourite/",
+          example_server    = "//jsfiddle.net",
+          username          = "",
+          static_hash       = "update_16_01_2018_1",
+          csrfToken         = Cookie.read('csrftoken'),
+          editor_save       = "",
+          mooshell,
+          preload_resources;
+
+        
+
+        Layout.skin = "light";// "light"
+
+        window.addEvent('domready', function() {
+          if (panel_js != 'javascript' && $('jslint')) {
+            $('jslint').getParent('li').hide();
+          }
+
+          $extend(Layout, new Events());
+          mooshell = new MooShellActions({
+            example_id: fiddleOptions.example_id,
+            exampleURL: fiddleOptions.exampleURL,
+            exampleSaveUrl: '/_save/',
+            // sendCallbackURL: '',
+            loadDependenciesURL: '/_get_dependencies/{lib_id}/',
+            loadLibraryVersionsURL: '/_get_library_versions/{group_id}/'
+          });
+
+          Layout.render();
+
+          // show editors and content when the last editor loads
+          // this will prevent flickering, plus looks nice
+          document.id('content').setStyle('opacity', 1);
+
+          // always keep this at the bottom
+          $$('select.panelChoice').each(function(sel) {
+            this.switchLanguage(sel);
+          }, mooshell);
+
+          initGrid()
+
+          
+        });
+      </script>
+
+      
+    
+
+    
+      <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
+  if (window.localStorage) {
+    ga('create', 'UA-366077-13', {
+      'storage': 'none',
+      'clientId': localStorage.getItem(GA_LOCAL_STORAGE_KEY)
+    });
+    ga(function(tracker) {
+      localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
+    });
+    ga('send', 'pageview', '/[user]/[fiddle]/[revision]/'); // where `url_structure` is for example `/[user]/[fiddle]/[revision]/embedded/js,css/`
+  }
+</script>
+
+      
+    
+
+    <!-- <script>
+      var HW_config = {
+        selector: ".changelog-badge",
+        account: "1xGMJQ"
+      };
+    </script>
+    <script async src="//cdn.headwayapp.co/widget.js"></script> -->
+
+    <link rel="icon" href="http://jsfiddle.net/favicon.png">
+
+    <title>Edit fiddle - JSFiddle</title>
+  <script id="_carbonads_projs" type="text/javascript" src="http://crbsrv.jsfiddle.net/ads/C6AILKT.json?segment=placement:jsfiddlenet&amp;callback=_carbonads_go"></script></head>
+  <body data-gr-c-s-loaded="true">
+    <form method="post" id="show-result" target="result" action="http://fiddle.jshell.net/_display/">
+      
+      
+      <div style="display:none"><input type="hidden" name="csrfmiddlewaretoken" value="d1W6dPvGpANF4QJfBAfFjNTPbWxL0mDe"></div>
+      <header>
+        <h1>
+          <span class="title">JSFiddle</span>
+          <div class="changelog-badge">
+            <a title="JSFiddle" href="http://jsfiddle.net/">
+              <svg width="46px" height="33px" viewBox="0 0 46 33">
+                <g class="asd" stroke-width="1.6" fill="none" fill-rule="evenodd">
+                  <path d="M23.4888889,20.543316 C21.4404656,18.4187374 19.0750303,15.6666667 16.4832014,15.6666667 C13.8721947,15.6666667 11.7555556,17.6366138 11.7555556,20.0666667 C11.7555556,22.4967196 13.8721947,24.4666667 16.4832014,24.4666667 C18.8347252,24.4666667 19.9845474,23.0125628 20.6429148,22.312473" id="Oval-1" stroke-linecap="round"></path>
+                  <path d="M22.5111111,19.5900174 C24.5595344,21.7145959 26.9249697,24.4666667 29.5167986,24.4666667 C32.1278053,24.4666667 34.2444444,22.4967196 34.2444444,20.0666667 C34.2444444,17.6366138 32.1278053,15.6666667 29.5167986,15.6666667 C27.1652748,15.6666667 26.0154526,17.1207706 25.3570852,17.8208603" id="Oval-1-Copy" stroke-linecap="round"></path>
+                  <path d="M45,22.7331459 C45,19.1499462 42.7950446,16.079593 39.6628004,14.7835315 C39.6774469,14.5246474 39.7003932,14.2674038 39.7003932,14.0035978 C39.7003932,6.82243304 33.8412885,1 26.611593,1 C21.3985635,1 16.9102123,4.03409627 14.8051788,8.41527616 C13.7828502,7.62878013 12.503719,7.15547161 11.1134367,7.15547161 C7.77825654,7.15547161 5.07450503,9.84159999 5.07450503,13.1544315 C5.07450503,13.7760488 5.16938207,14.3779791 5.3477444,14.9418479 C2.74863428,16.4787471 1,19.2867709 1,22.5105187 C1,27.3287502 4.89630545,31.2367856 9.72803666,31.31094 L36.3341301,31.3109406 C41.1201312,31.3406346 45,27.4870665 45,22.7331459 L45,22.7331459 Z" id="Shape-path" stroke-linejoin="round"></path>
+                </g>
+              </svg>
+            </a>
+          </div>
+        </h1>
+        
+          <div id="actions">
+  <nav class="actionCont collapsed">
+    <div class="actionItem">
+      <a class="aiButton" id="run" title="Run (CTRL + Return)" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#run">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        Run</a>
+    </div>
+
+    
+    
+
+    
+    
+      <div class="actionItem hidden">
+        <a class="aiButton" id="savenew" title="Save new fiddle (CTRL + S)" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#save">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload-cloud"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
+          Save</a>
+      </div>
+      <div class="actionItem visible">
+        <a class="aiButton" id="update" title="Update (CTRL + S)" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#update">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload-cloud"><polyline points="16 16 12 12 8 16"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
+        Update</a>
+      </div>
+      <div class="actionItem visible">
+        <a class="aiButton" id="fork" title="Fork into a new fiddle" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#fork">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shuffle"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+          Fork</a>
+      </div>
+    
+
+    
+
+    <div class="actionItem" style="display: block;">
+      <a class="aiButton" id="tidy" title="Tidy messy code" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#tidy">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-align-left"><line x1="17" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="17" y1="18" x2="3" y2="18"></line></svg>
+        Tidy</a>
+    </div>
+    <!-- <div class="actionItem">
+      <a class="aiButton" id="showjscode" title="Show JavaScript code" href="#showjs"><i class="bts bt-code"></i>Show JS</a>
+    </div -->
+    <div class="actionItem">
+      <a class="aiButton" id="collaborate" title="Collaborate on code" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#collaborate">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Collaborate</a>
+    </div>
+  </nav>
+
+  
+  
+
+  <ul class="actionCont dropdown">
+    <li class="actionItem visible">
+      <a class="aiButton dropdownTrigger" id="share" title="Embed this fiddle" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#embed">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+        Embed</a>
+      <div class="dropdownCont center">
+        <div class="dcWrapper embed">
+
+          <div id="creator">
+            <section>
+              <h3>Tabs:</h3>
+              <div class="inlineFields">
+                <label class="inputCont_checkbox checkboxCont">
+                  <input type="checkbox" name="tabs" value="js" checked="">
+                  <span class="checkbox"><i class="bts bt-check"></i></span> JavaScript
+                </label>
+                <label class="inputCont_checkbox checkboxCont">
+                  <input type="checkbox" name="tabs" value="html" checked="">
+                  <span class="checkbox"><i class="bts bt-check"></i></span> HTML
+                </label>
+                <label class="inputCont_checkbox checkboxCont">
+                  <input type="checkbox" name="tabs" value="css" checked="">
+                  <span class="checkbox"><i class="bts bt-check"></i></span> CSS
+                </label>
+                <label class="inputCont_checkbox checkboxCont">
+                  <input type="checkbox" name="tabs" value="result" checked="">
+                  <span class="checkbox"><i class="bts bt-check"></i></span> Result
+                </label>
+              </div> <!-- /inlineFields -->
+            </section>
+
+            <section class="noborder">
+              <h3>Visual:</h3>
+              <div class="inlineFields">
+                <label class="inputCont_checkbox checkboxCont">
+                  <input type="radio" name="skin" value="light" checked="">
+                  <span class="radio"></span> Light
+                </label>
+                <label class="inputCont_checkbox checkboxCont">
+                  <input type="radio" name="skin" value="dark">
+                  <span class="radio"></span> Dark
+                </label>
+              </div> <!-- /inlineFields -->
+              <label class="inputCont_text">
+                <input type="text" name="accentColor" maxlength="7" placeholder="Accent color">
+              </label>
+              <label class="inputCont_text">
+                <input type="text" name="fontColor" maxlength="7" placeholder="Font color">
+              </label>
+              <label class="inputCont_text">
+                <input type="text" name="menuColor" maxlength="7" placeholder="Menu background">
+              </label>
+              <label class="inputCont_text">
+                <input type="text" name="bodyColor" maxlength="7" placeholder="Code background">
+              </label>
+            </section>
+
+            <section class="noborder">
+              <h3>Embed code <a href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#" class="codeTypeToggle">Prefer iframe?</a>:</h3>
+              <div class="embedCodeWrap">
+<textarea class="embedCode" id="share_embedded_dropdown" data-view="embed" data-pattern-value="&lt;script async src=&quot;{embedSrc}&quot;&gt;&lt;/script&gt;">&lt;script async src="{embedSrc}"&gt;&lt;/script&gt;
+</textarea>
+              </div> <!-- /embedCodeWrap -->
+
+              <div class="embedCodeWrap hidden">
+<textarea class="embedCode" data-view="embedded" data-pattern-value="&lt;iframe width=&quot;100%&quot; height=&quot;300&quot; src=&quot;{embedSrc}&quot; allowpaymentrequest allowfullscreen=&quot;allowfullscreen&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;">&lt;iframe width="100%" height="300" src="{embedSrc}" allowfullscreen allowpaymentrequest frameborder="0"&gt;&lt;/iframe&gt;
+</textarea>
+                <p><strong>No autoresizing</strong> to fit the code</p>
+                <p><strong>Render blocking</strong> of the parent page</p>
+              </div> <!-- /embedCodeWrap -->
+            </section>
+          </div> <!-- /creator -->
+
+          <div id="preview"></div> <!-- /preview -->
+
+        </div> <!-- /dcWrapper -->
+      </div> <!-- /dropdownCont -->
+    </li> <!-- /actionItem -->
+  </ul> <!-- /actionCont -->
+
+
+  
+<ul class="actionCont dropdown right">
+  <li class="actionItem hidden draftTriggerCont">
+    <a class="aiButton dropdownTrigger applyDraft" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#">Unsaved draft</a>
+    <div class="dropdownCont">
+      <div class="dcWrapper diffCont">
+        <h4>Diff between the <strong>saved</strong> and <strong>locally drafted</strong> fiddle:</h4>
+        <div class="diffPanels">
+          <div class="diffWrap" id="diff-html"></div>
+          <div class="diffWrap" id="diff-js"></div>
+          <div class="diffWrap" id="diff-css"></div>
+        </div><!-- /diffCont -->
+        <p><a class="apply" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#" id="apply-draft">Apply local draft version</a> or <a href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#" id="discard-draft">discard it</a></p>
+      </div><!-- /actionItem -->
+    </div><!-- /dcWrapper -->
+  </li> <!-- /actionItem -->
+
+  <li class="actionItem">
+    <a class="aiButton dropdownTrigger" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#" title="Switch panels grid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layout"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+    </a>
+    <div class="dropdownCont">
+      <div class="dcWrapper" id="layout">
+        <div>
+          <label>
+            <input name="editor_mode" type="radio" value="grid_1" checked="">
+            <span class="gridMode grid_1"></span>
+            Classic
+          </label>
+          <label>
+            <input name="editor_mode" type="radio" value="grid_2">
+            <span class="gridMode grid_2"></span>
+            Columns
+          </label>
+          <label>
+            <input name="editor_mode" type="radio" value="grid_3">
+            <span class="gridMode grid_3"></span>
+            Bottom results
+          </label>
+          <label>
+            <input name="editor_mode" type="radio" value="grid_4">
+            <span class="gridMode grid_4"></span>
+            Right results
+          </label>
+        </div>
+      </div>
+    </div>
+  </li> <!-- /actionItem -->
+
+  <li class="actionItem">
+    <a class="aiButton dropdownTrigger" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#" title="Editor settings">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+    </a>
+    <div class="dropdownCont">
+      <div class="dcWrapper" id="editor-options">
+        <p>
+          <label class="checkboxCont">
+            <input type="checkbox" name="darkTheme" checked="">
+            <span class="checkbox"></span>
+            Dark theme
+          </label>
+        </p>
+        <p>
+          <label class="checkboxCont">
+            <input type="checkbox" name="autoCloseTags" checked="">
+            <span class="checkbox"></span>
+            Auto-close HTML tags
+          </label>
+        </p>
+        <p>
+          <label class="checkboxCont">
+            <input type="checkbox" name="lineNumbers" checked="">
+            <span class="checkbox"></span>
+            Show line numbers
+          </label>
+        </p>
+        <p>
+          <label class="checkboxCont">
+            <input type="checkbox" name="lineWrapping" checked="">
+            <span class="checkbox"></span>
+            Enable line wrapping
+          </label>
+        </p>
+        <p>
+          <label class="checkboxCont">
+            <input type="checkbox" name="indentWithTabs">
+            <span class="checkbox"></span>
+            Indent with tabs
+          </label>
+        </p>
+
+        <!-- <div class="selectPair">
+          <span class="label">Indent size:</span>
+          <div class="selectCont">
+            <select name="indentUnit">
+              <option value="2">2 spaces</option>
+              <option value="3">3 spaces</option>
+              <option value="4">4 spaces</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="selectPair">
+          <span class="label">Key map:</span>
+          <div class="selectCont">
+            <select name="keyMap">
+              <option value="default">Default</option>
+              <option value="sublime">Sublime Text</option>
+              <option value="vim">VIM</option>
+              <option value="emacs">EMACS</option>
+            </select>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </li> <!-- /actionItem -->
+
+  
+    <li class="actionItem noIcon"><a class="aiButton" id="login" title="Login" href="http://jsfiddle.net/user/login/"><i class="bts bt-smile"></i>Sign in</a></li>
+  
+</ul>
+
+</div>
+
+        
+        <div id="progressbar"><div class="pb"></div></div>
+      </header>
+
+      
+        <div id="sidebar">
+          <section id="s-cont">
+            
+  
+  <div class="sidebarItem opened">
+    <h3 class="toggler">Author</h3>
+    <div class="body">
+      <div class="avatar">
+        <img src="./Edit fiddle - JSFiddle_files/saved_resource" height="60" width="60">
+        <a title="See public fiddles" href="http://jsfiddle.net/user/SkyBurchard/fiddles/">
+          
+            Sky Burchard
+          
+        </a>
+        <div class="company">
+          
+            Sky Burchard
+          
+          
+            −
+          
+          
+            Los Angeles
+          
+        </div>
+      </div> <!-- /avatar -->
+
+      <!-- <ul class="userDetails">
+        
+          <li><i class="bts bt-map-marker"></i>Los Angeles</li>
+        
+        
+        
+      </ul>  /userDetails -->
+    </div> <!-- /body -->
+  </div> <!-- /sidebarItem -->
+
+
+            <div class="sidebarItem">
+  <h3 class="toggler" title="Posted on 31 Jul 2014">
+    Fiddle meta
+  </h3>
+  <div class="body">
+    <p>
+      <label>
+        <input id="id_title" type="text" name="title" maxlength="255" value="" placeholder="Untitled fiddle">
+      </label>
+    </p>
+    <p>
+      <label>
+        <textarea id="id_description" rows="10" cols="40" name="description" placeholder="No description"></textarea>
+      </label>
+    </p>
+    <p class="metaInfo">Add title to make the fiddle public.</p>
+  </div> <!-- /body -->
+</div> <!-- /sidebarItem -->
+
+            
+<div class="sidebarItem">
+
+  
+    <h3 class="toggler">
+      External resources 
+    </h3>
+  
+
+  <div class="body">
+    <div id="external-resources-form">
+      <input id="external_resource" type="text" value="" placeholder="JavaScript/CSS URL">
+      <a id="add_external_resource" class="submit" href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#" title="Add resource">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+      </a>
+    </div>
+    <input type="hidden" value="" id="external_resources_id" name="add_external_resources">
+
+    <script type="text/javascript">
+      var resources = [];
+    </script>
+
+    <ul id="external_resources_list">
+      
+    </ul>
+
+  </div> <!-- /body -->
+</div> <!-- /sidebarItem -->
+
+<script type="text/javascript">
+  var default_text = 'JavaScript/CSS URL',
+      add_external_resource_url = "/_add_external_resource/";
+</script>
+
+            <div class="sidebarItem">
+  <h3 class="toggler">
+    Async requests
+  </h3>
+  <div class="body">
+    <p><code>/echo</code> simulates Async calls:<br>
+      JSON: <code>/echo/json/</code><br>
+      JSONP: <code>//jsfiddle.net/echo/jsonp/</code><br>
+      HTML: <code>/echo/html/</code><br>
+      XML: <code>/echo/xml/</code>
+    </p>
+    <p>See <a href="http://doc.jsfiddle.net/use/echo.html" target="_new">docs</a> for more info.</p>
+  </div> <!-- /body -->
+</div> <!-- /sidebarItem -->
+
+            <div class="sidebarItem">
+  <h3 class="toggler">
+    Other (links, license)
+  </h3>
+  <div class="body">
+    <p class="maintainers">Created and maintained by <a title="Piotr&#39;s twitter" href="http://twitter.com/zalun" target="_blank">Piotr</a> and <a title="UX and UI Designer" href="http://twitter.com/oskar" target="_blank">@oskar</a>.</p>
+    <p>Hosted on <a href="https://m.do.co/c/52e7a0ad196d" target="_blank"><strong>DigitalOcean</strong></a></p>
+    <p><strong>License</strong></p>
+    <p>All code belongs to the poster and no license is enforced.</p>
+    <p>JSFiddle or its authors are not responsible or liable for any loss or damage of any kind during the usage of provided code.</p>
+    <p><strong>Links</strong></p>
+    <p>
+      <a href="https://github.com/jsfiddle/jsfiddle-issues/issues" target="_blank">Bug tracker</a><br>
+      <a href="https://trello.com/b/LakLkQBW/jsfiddle-roadmap" target="_blank">Roadmap</a> (vote for features)<br>
+      <a href="https://jsfiddle.net/about" target="_blank">About JSFiddle</a><br>
+      <!-- <a href="http://doc.jsfiddle.net/" target="_blank">Docs</a><br> -->
+      <a href="http://status.jsfiddle.net/" target="_blank">Status page</a> by <a href="https://updown.io/r/bzxdq" target="_blank">updown.io</a>
+    </p>
+  </div> <!-- /body -->
+</div> <!-- /sidebarItem -->
+
+<style media="screen">
+  .maintainers {
+    position: absolute;
+    top: -900em;
+    left: -900em;
+  }
+</style>
+
+            <!-- <h3 class="toggler">Report fiddle</h3>
+<div class="element">
+  <div class="elementBody">
+    <div class="ebCont" id="reporting">
+      <textarea name="report_reason" placeholder="Reason for reporting?"></textarea>
+      
+        <input type="text" name="report_email" placeholder="Your e-mail">
+      
+      <p class="submitCont">
+        <a href="#">Send report</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  var reporting  = document.querySelector("#reporting")
+  var url        = document.location.href
+  var email      = reporting.querySelector("input[name='report_email']")
+  var reason     = reporting.querySelector("textarea")
+  var submitCont = reporting.querySelector(".submitCont")
+  var submit     = reporting.querySelector(".submitCont a")
+
+  submit.addEventListener("click", function(event){
+    event.preventDefault()
+    event.stopPropagation()
+
+    if (reason.value === "" || reason.value.length < 10){
+      alert("Pleade describe the reason for reporting this fiddle.")
+    } else {
+      new Request.JSON({
+        url: "/_report_fiddle/",
+        method: "post",
+        data: {
+          url:    url,
+          reason: reason.value,
+          email:  email.value
+        },
+        onRequest: function(){
+          submitCont.innerHTML = "Sending ..."
+        },
+        onSuccess: function(response){
+          submitCont.innerHTML = "Sent"
+        }
+      }).send()
+    }
+  })
+</script>
+
+<style>
+  #reporting textarea,
+  #reporting input {
+    margin-bottom: 10px;
+  }
+
+  #reporting .submitCont {
+    text-align: right;
+  }
+</style>
+ -->
+          </section>
+          <section id="s-bottom">
+            <div class="twitterCont">
+              <!-- <script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=jsfiddlenet" id="_carbonads_js"></script> -->
+              <script async="" type="text/javascript" src="./Edit fiddle - JSFiddle_files/carbon.js" id="_carbonads_js"></script>
+            </div>
+            <div id="keep-us-running" class="show color_3">
+              <p>Like JSFiddle?</p>
+              <p>If you don't mind tech-related ads, and want to keep us running, whitelist JSFiddle in your ad blocker.</p>
+              <p>Thank you! ❤️</p>
+            </div>
+            <script type="text/javascript">
+              window.onload = function(){
+                setTimeout(function(){
+                  var info = document.getElementById("keep-us-running")
+                  var ads = document.getElementById("carbonads")
+                  var randomColor = Math.floor(Math.random() * 5) + 1
+
+                  if (ads === null){
+                    info.className = "show " + "color_" + randomColor;
+                    info.addEvent("click", function(){
+                      info.className = "";
+                    });
+                  }
+                }, 2000)
+              }
+            </script>
+            
+            
+          </section>
+        </div>
+        <div id="content" style="opacity: 1;">
+          
+          
+
+
+<input type="hidden" name="version" value="7" id="id_version">
+<input type="hidden" id="id_slug" name="slug" value="7Lgm5">
+
+<div id="editor">     <div class="panel-v left" style="width: calc(50% - 0.5px);">       <div class="panel-h panel" style="height: calc(11.4075% - 0.5px);">         <textarea id="id_code_html" name="code_html" style="display: none;"></textarea>   <div class="windowLabelCont">     <a href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#" class="windowLabel" data-panel="html">       <span class="label">HTML</span>       <svg width="8" height="7" viewBox="-0.019531 -52.792969 30.039062 25.195312">         <path d="M29.941406 -52.500000C29.785156 -52.656250 29.589844 -52.753906 29.355469 -52.792969L0.644531 -52.792969C0.410156 -52.753906 0.214844 -52.656250 0.058594 -52.500000C-0.019531 -52.265625 0.000000 -52.050781 0.117188 -51.855469L14.472656 -27.890625C14.628906 -27.734375 14.804688 -27.636719 15.000000 -27.597656C15.234375 -27.636719 15.410156 -27.734375 15.527344 -27.890625L29.882812 -51.855469C30.000000 -52.089844 30.019531 -52.304688 29.941406 -52.500000ZM29.941406 -52.500000"></path>       </svg>     </a>   </div>       <div class="CodeMirror cm-s-default CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 38px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" tabindex="0"></textarea></div><div class="CodeMirror-vscrollbar" cm-not-content="true"><div style="min-width: 1px; height: 0px;"></div></div><div class="CodeMirror-hscrollbar" cm-not-content="true"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 34px; margin-bottom: -15px; border-right-width: 15px; min-height: 56px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre><div class="CodeMirror-linenumber CodeMirror-gutter-elt"><div>3</div></div></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"><div class="CodeMirror-cursor" style="left: 4px; top: 0px; height: 16px;">&nbsp;</div></div><div class="CodeMirror-code" role="presentation"><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">1</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">script</span> <span class="cm-attribute">src</span>=<span class="cm-string">"http://threejs.org/build/three.min.js"</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">script</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">2</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">script</span> <span class="cm-attribute">src</span>=<span class="cm-string">"http://threejs.org/examples/js/controls/OrbitControls.js"</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">script</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">3</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">'container'</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 15px; width: 1px; border-bottom: 0px solid transparent; top: 56px;"></div><div class="CodeMirror-gutters" style="height: 71px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 34px;"></div></div></div></div></div>       <div class="gutter gutter-vertical" style="height: 1px;"></div><div class="panel-h panel" style="height: calc(88.5925% - 0.5px);">         <textarea id="id_code_js" name="code_js" style="display: none;"></textarea>   <div class="windowLabelCont">     <a href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#" class="windowLabel" data-panel="js">       <span class="label">JavaScript (No-Library (pure JS))</span>       <svg width="8" height="7" viewBox="-0.019531 -52.792969 30.039062 25.195312">         <path d="M29.941406 -52.500000C29.785156 -52.656250 29.589844 -52.753906 29.355469 -52.792969L0.644531 -52.792969C0.410156 -52.753906 0.214844 -52.656250 0.058594 -52.500000C-0.019531 -52.265625 0.000000 -52.050781 0.117188 -51.855469L14.472656 -27.890625C14.628906 -27.734375 14.804688 -27.636719 15.000000 -27.597656C15.234375 -27.636719 15.410156 -27.734375 15.527344 -27.890625L29.882812 -51.855469C30.000000 -52.089844 30.019531 -52.304688 29.941406 -52.500000ZM29.941406 -52.500000"></path>       </svg>     </a>   </div>       <div class="CodeMirror cm-s-default CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 291px; left: 441px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" tabindex="0"></textarea></div><div class="CodeMirror-vscrollbar" cm-not-content="true" style="display: block; bottom: 0px;"><div style="min-width: 1px; height: 2152px;"></div></div><div class="CodeMirror-hscrollbar" cm-not-content="true"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 34px; margin-bottom: -15px; border-right-width: 15px; min-height: 2152px; padding-right: 15px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre>x</pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors" style=""><div class="CodeMirror-cursor" style="left: 407px; top: 1696px; height: 16px;">&nbsp;</div></div><div class="CodeMirror-code" role="presentation" style=""><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">1</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">container</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">2</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">camera</span>, <span class="cm-def">controls</span>, <span class="cm-def">scene</span>, <span class="cm-def">renderer</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">3</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">4</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">init</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">5</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">animate</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">6</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">7</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">function</span> <span class="cm-def">init</span>() {</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">8</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">9</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">camera</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">PerspectiveCamera</span>(<span class="cm-number">75</span>, <span class="cm-variable">window</span>.<span class="cm-property">innerWidth</span> <span class="cm-operator">/</span> <span class="cm-variable">window</span>.<span class="cm-property">innerHeight</span>, <span class="cm-number">1</span>, <span class="cm-number">10000</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">10</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">camera</span>.<span class="cm-property">position</span>.<span class="cm-property">z</span> <span class="cm-operator">=</span> <span class="cm-number">1000</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">11</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">12</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">OrbitControls</span>(<span class="cm-variable">camera</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">13</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">14</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">rotateSpeed</span> <span class="cm-operator">=</span> <span class="cm-number">1.0</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">15</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">zoomSpeed</span> <span class="cm-operator">=</span> <span class="cm-number">1.2</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">16</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">panSpeed</span> <span class="cm-operator">=</span> <span class="cm-number">0.8</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">17</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">18</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">noZoom</span> <span class="cm-operator">=</span> <span class="cm-atom">false</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">19</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">noPan</span> <span class="cm-operator">=</span> <span class="cm-atom">false</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">20</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">21</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">staticMoving</span> <span class="cm-operator">=</span> <span class="cm-atom">true</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">22</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">dynamicDampingFactor</span> <span class="cm-operator">=</span> <span class="cm-number">0.3</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">23</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">24</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">keys</span> <span class="cm-operator">=</span> [<span class="cm-number">65</span>, <span class="cm-number">83</span>, <span class="cm-number">68</span>];</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">25</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">26</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">addEventListener</span>(<span class="cm-string">'change'</span>, <span class="cm-variable">render</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">27</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">28</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// world</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">29</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">30</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">scene</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Scene</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">31</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">sceneTarget</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Scene</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">32</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">33</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">testObject_G</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">CubeGeometry</span>(<span class="cm-number">100</span>, <span class="cm-number">100</span>, <span class="cm-number">5</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">34</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">testObject_M</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">MeshBasicMaterial</span>({</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">35</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-property">color</span>: <span class="cm-number">0xBBBBBB</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">36</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  });</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">37</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">testObject_Mesh</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Mesh</span>(<span class="cm-variable-2">testObject_G</span>, <span class="cm-variable-2">testObject_M</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">38</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable-2">testObject_Mesh</span>.<span class="cm-property">position</span>.<span class="cm-property">x</span> <span class="cm-operator">=</span> <span class="cm-operator">-</span><span class="cm-number">150</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">39</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">scene</span>.<span class="cm-property">add</span>(<span class="cm-variable-2">testObject_Mesh</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">40</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">testObject_Mesh2</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Mesh</span>(<span class="cm-variable-2">testObject_G</span>, <span class="cm-variable-2">testObject_M</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">41</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable-2">testObject_Mesh2</span>.<span class="cm-property">position</span>.<span class="cm-property">x</span> <span class="cm-operator">=</span> <span class="cm-number">0</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">42</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">scene</span>.<span class="cm-property">add</span>(<span class="cm-variable-2">testObject_Mesh2</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">43</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">testObject_Mesh3</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Mesh</span>(<span class="cm-variable-2">testObject_G</span>, <span class="cm-variable-2">testObject_M</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">44</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable-2">testObject_Mesh3</span>.<span class="cm-property">position</span>.<span class="cm-property">x</span> <span class="cm-operator">=</span> <span class="cm-number">150</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">45</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">scene</span>.<span class="cm-property">add</span>(<span class="cm-variable-2">testObject_Mesh3</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">46</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">47</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">targetObject_G</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">SphereGeometry</span>( <span class="cm-number">5</span> );</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">48</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">targetObgect_M</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">MeshBasicMaterial</span>({</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">49</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-property">color</span>: <span class="cm-number">0xff0000</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">50</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  });</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">51</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">52</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">targetMesh</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Mesh</span>(<span class="cm-variable-2">targetObject_G</span>, <span class="cm-variable-2">targetObgect_M</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">53</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable-2">targetMesh</span>.<span class="cm-property">position</span>.<span class="cm-property">set</span>( <span class="cm-number">0</span>, <span class="cm-number">200</span>, <span class="cm-operator">-</span><span class="cm-number">200</span> );</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">54</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">sceneTarget</span>.<span class="cm-property">add</span>(<span class="cm-variable-2">targetMesh</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">55</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">56</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// renderer</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">57</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">58</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">renderer</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">WebGLRenderer</span>({</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">59</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-property">antialias</span>: <span class="cm-atom">true</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">60</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  });</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">61</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">renderer</span>.<span class="cm-property">setSize</span>(<span class="cm-variable">window</span>.<span class="cm-property">innerWidth</span>, <span class="cm-variable">window</span>.<span class="cm-property">innerHeight</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">62</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">renderer</span>.<span class="cm-property">autoClear</span> <span class="cm-operator">=</span> <span class="cm-atom">false</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">63</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">renderer</span>.<span class="cm-property">setClearColor</span>(<span class="cm-number">0xffffff</span>, <span class="cm-number">1</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">64</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">container</span> <span class="cm-operator">=</span> <span class="cm-variable">document</span>.<span class="cm-property">getElementById</span>(<span class="cm-string">'container'</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">65</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">container</span>.<span class="cm-property">appendChild</span>(<span class="cm-variable">renderer</span>.<span class="cm-property">domElement</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">66</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">67</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">68</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">69</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">//</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">70</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">71</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">window</span>.<span class="cm-property">addEventListener</span>(<span class="cm-string">'resize'</span>, <span class="cm-variable">onWindowResize</span>, <span class="cm-atom">false</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">72</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">73</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  }</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">74</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">75</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">function</span> <span class="cm-def">onWindowResize</span>() {</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">76</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">77</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">camera</span>.<span class="cm-property">aspect</span> <span class="cm-operator">=</span> <span class="cm-variable">window</span>.<span class="cm-property">innerWidth</span> <span class="cm-operator">/</span> <span class="cm-variable">window</span>.<span class="cm-property">innerHeight</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">78</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">camera</span>.<span class="cm-property">updateProjectionMatrix</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">79</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">80</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">renderer</span>.<span class="cm-property">setSize</span>(<span class="cm-variable">window</span>.<span class="cm-property">innerWidth</span>, <span class="cm-variable">window</span>.<span class="cm-property">innerHeight</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">81</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">82</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">handleResize</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">83</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">84</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">render</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">85</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">86</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  }</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">87</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">88</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">function</span> <span class="cm-def">animate</span>() {</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">89</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">90</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">requestAnimationFrame</span>(<span class="cm-variable">animate</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">91</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">controls</span>.<span class="cm-property">update</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">92</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">93</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  }</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">94</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">95</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">function</span> <span class="cm-def">render</span>() {</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">96</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">97</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">renderer</span>.<span class="cm-property">render</span>(<span class="cm-variable">scene</span>, <span class="cm-variable">camera</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">98</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">renderer</span>.<span class="cm-property">render</span>(<span class="cm-variable">sceneTarget</span>, <span class="cm-variable">camera</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">99</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">castRays</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">100</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">101</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  }</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">102</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">103</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">function</span> <span class="cm-def">castRays</span>() {</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">104</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">105</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">// rays</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">106</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">107</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">direction</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Vector3</span>(<span class="cm-number">0</span>, <span class="cm-number">400</span>, <span class="cm-operator">-</span><span class="cm-number">400</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">108</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">109</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">startPoint</span> <span class="cm-operator">=</span> <span class="cm-variable">camera</span>.<span class="cm-property">position</span>.<span class="cm-property">clone</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">110</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">111</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">directionVector</span> <span class="cm-operator">=</span> <span class="cm-variable-2">direction</span>.<span class="cm-property">sub</span>( <span class="cm-variable-2">startPoint</span> );</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">112</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">113</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">ray</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Raycaster</span>(<span class="cm-variable-2">startPoint</span>, <span class="cm-variable-2">directionVector</span>.<span class="cm-property">clone</span>(). <span class="cm-property">normalize</span>());</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">114</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">115</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">scene</span>.<span class="cm-property">updateMatrixWorld</span>(); <span class="cm-comment">// required, since you haven't rendered yet</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">116</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">117</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">rayIntersects</span> <span class="cm-operator">=</span> <span class="cm-variable-2">ray</span>.<span class="cm-property">intersectObjects</span>(<span class="cm-variable">scene</span>.<span class="cm-property">children</span>, <span class="cm-atom">true</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">118</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">119</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">if</span> (<span class="cm-variable-2">rayIntersects</span>[<span class="cm-number">0</span>] <span class="cm-operator">&amp;&amp;</span> <span class="cm-variable-2">rayIntersects</span>[<span class="cm-number">0</span>].<span class="cm-property">distance</span> <span class="cm-operator">&lt;</span> <span class="cm-variable-2">directionVector</span>.<span class="cm-property">length</span>()) {</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">120</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">console</span>.<span class="cm-property">log</span>(<span class="cm-variable-2">rayIntersects</span>[<span class="cm-number">0</span>]);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">121</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">122</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">material</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">LineBasicMaterial</span>({</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">123</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-property">color</span>: <span class="cm-number">0x0000ff</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">124</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  });</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">125</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">geometry</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Geometry</span>();</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">126</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable-2">geometry</span>.<span class="cm-property">vertices</span>.<span class="cm-property">push</span>(<span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Vector3</span>(<span class="cm-variable-2">ray</span>.<span class="cm-property">ray</span>.<span class="cm-property">origin</span>.<span class="cm-property">x</span>, <span class="cm-variable-2">ray</span>.<span class="cm-property">ray</span>.<span class="cm-property">origin</span>.<span class="cm-property">y</span>, <span class="cm-variable-2">ray</span>.<span class="cm-property">ray</span>.<span class="cm-property">origin</span>.<span class="cm-property">z</span>));</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">127</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable-2">geometry</span>.<span class="cm-property">vertices</span>.<span class="cm-property">push</span>(<span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Vector3</span>(<span class="cm-number">0</span>, <span class="cm-number">200</span>, <span class="cm-operator">-</span><span class="cm-number">200</span>));</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">128</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">line</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">THREE</span>.<span class="cm-property">Line</span>(<span class="cm-variable-2">geometry</span>, <span class="cm-variable-2">material</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">129</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">sceneTarget</span>.<span class="cm-property">add</span>( <span class="cm-variable-2">line</span> );</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">130</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">131</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">132</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">133</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  }</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 15px; width: 1px; border-bottom: 0px solid transparent; top: 2152px;"></div><div class="CodeMirror-gutters" style="height: 2167px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 34px;"></div></div></div></div></div>     </div>     <div class="gutter gutter-horizontal" style="width: 1px;"></div><div class="panel-v right" style="width: calc(50% - 0.5px);">       <div class="panel-h panel" style="height: calc(21.5664% - 0.5px);">         <textarea id="id_code_css" name="code_css" style="display: none;"></textarea>   <div class="windowLabelCont">     <a href="http://jsfiddle.net/SkyBurchard/7Lgm5/7/#" class="windowLabel" data-panel="css">       <span class="label">CSS</span>       <svg width="8" height="7" viewBox="-0.019531 -52.792969 30.039062 25.195312">         <path d="M29.941406 -52.500000C29.785156 -52.656250 29.589844 -52.753906 29.355469 -52.792969L0.644531 -52.792969C0.410156 -52.753906 0.214844 -52.656250 0.058594 -52.500000C-0.019531 -52.265625 0.000000 -52.050781 0.117188 -51.855469L14.472656 -27.890625C14.628906 -27.734375 14.804688 -27.636719 15.000000 -27.597656C15.234375 -27.636719 15.410156 -27.734375 15.527344 -27.890625L29.882812 -51.855469C30.000000 -52.089844 30.019531 -52.304688 29.941406 -52.500000ZM29.941406 -52.500000"></path>       </svg>     </a>   </div>       <div class="CodeMirror cm-s-default CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 38px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" tabindex="0"></textarea></div><div class="CodeMirror-vscrollbar" cm-not-content="true"><div style="min-width: 1px; height: 0px;"></div></div><div class="CodeMirror-hscrollbar" cm-not-content="true"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 34px; margin-bottom: -15px; border-right-width: 15px; min-height: 24px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre><div class="CodeMirror-linenumber CodeMirror-gutter-elt"><div>1</div></div></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"><div class="CodeMirror-cursor" style="left: 4px; top: 0px; height: 16px;">&nbsp;</div></div><div class="CodeMirror-code" role="presentation"><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -34px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">1</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 15px; width: 1px; border-bottom: 0px solid transparent; top: 24px;"></div><div class="CodeMirror-gutters" style="height: 39px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 34px;"></div></div></div></div></div>       <div class="gutter gutter-vertical" style="height: 1px;"></div><div class="panel-h panel resultsPanel" style="height: calc(78.4336% - 0.5px);">         <iframe name="result" allow="midi; geolocation; microphone; camera" sandbox="allow-forms allow-scripts allow-same-origin allow-modals allow-popups" allowfullscreen="" allowpaymentreqeust="" frameborder="0" src="./Edit fiddle - JSFiddle_files/saved_resource.html"></iframe>                </div>     </div></div>
+
+<div class="windowSettings html" data-panel="html">
+  <h3>Language</h3>
+<div class="selectCont">
+  <select name="panel_html" class="panelChoice" id="panel_html_choice" disabled="disabled" data-panel_id="id_code_html" data-panel="html">
+    
+      <option data-mime-type="text/html" value="0" selected="">HTML</option>
+    
+  </select>
+  <label for="js_lib"><i class="bts bt-angle-down"></i></label>
+</div> <!-- /selectCont -->
+
+<h3>Doctype</h3>
+<div class="selectCont">
+  <select name="doctype">
+    
+      <option id="dtd_XHTML 1.0 Strict" value="1">XHTML 1.0 Strict</option>
+    
+      <option id="dtd_XHTML 1.0 Transitional" value="2">XHTML 1.0 Transitional</option>
+    
+      <option selected="" id="dtd_HTML 5" value="3">HTML 5</option>
+    
+      <option id="dtd_HTML 4.01 Strict" value="4">HTML 4.01 Strict</option>
+    
+      <option id="dtd_HTML 4.01 Transitional" value="5">HTML 4.01 Transitional</option>
+    
+      <option id="dtd_HTML 4.01 Frameset" value="6">HTML 4.01 Frameset</option>
+    
+  </select>
+  <label for="doctype"><i class="bts bt-angle-down"></i></label>
+</div>
+
+<h3>Body tag</h3>
+<p>
+  <label>
+    <input id="id_body_tag" type="text" name="body_tag" maxlength="255">
+  </label>
+</p>
+
+</div> <!-- /windowSettings -->
+
+<div class="windowSettings js" data-panel="js">
+  
+
+
+<h3>Language</h3>
+<div class="selectCont">
+  <select name="panel_js" class="panelChoice" id="panel_js_choice" data-panel_id="id_code_js" data-panel="js">
+    
+      <option data-mime-type="text/javascript" value="0" selected="">JavaScript</option>
+    
+      <option data-mime-type="text/x-coffeescript" value="1">CoffeeScript</option>
+    
+      <option data-mime-type="application/javascript;version=1.7" value="2">JavaScript 1.7</option>
+    
+      <option data-mime-type="text/babel" value="3">Babel + JSX</option>
+    
+      <option data-mime-type="text/typescript" value="4">TypeScript</option>
+    
+  </select>
+</div> <!-- /selectCont -->
+
+<h3>Frameworks &amp; Extensions</h3>
+<div class="panelExtrasChoice">
+  
+    
+      
+<div class="selectCont">
+  <select name="js_lib" id="js_lib">
+    
+    <optgroup label="AngularJS">
+      
+        <option value="281">AngularJS 2.0.0-alpha.47</option>
+      
+        <option value="283">AngularJS 1.4.8</option>
+      
+        <option value="180">AngularJS 1.2.1</option>
+      
+        <option value="137">AngularJS 1.1.1</option>
+      
+        
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="Bonsai">
+      
+        <option value="120">Bonsai 0.4.1</option>
+      
+    </optgroup>
+    
+    <optgroup label="Brick">
+      
+        <option value="176">Brick edge</option>
+      
+    </optgroup>
+    
+    <optgroup label="CreateJS">
+      
+        <option value="279">CreateJS 2015.05.21</option>
+      
+        <option value="170">CreateJS 2013.09.25</option>
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="D3">
+      
+        <option value="134">D3 3.x</option>
+      
+    </optgroup>
+    
+    <optgroup label="Dojo">
+      
+        <option value="87">Dojo (nightly)</option>
+      
+        <option value="356">Dojo 1.12.2</option>
+      
+        <option value="358">Dojo 1.11.4</option>
+      
+        <option value="360">Dojo 1.10.8</option>
+      
+        
+      
+        
+      
+        
+      
+        <option value="362">Dojo 1.9.11</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        <option value="364">Dojo 1.8.14</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        <option value="366">Dojo 1.7.12</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        <option value="368">Dojo 1.6.5</option>
+      
+        
+      
+        
+      
+        
+      
+        <option value="370">Dojo 1.5.6</option>
+      
+        
+      
+        
+      
+        
+      
+        <option value="372">Dojo 1.4.8</option>
+      
+        
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="Ember">
+      
+        <option value="190">Ember (latest)</option>
+      
+        
+      
+        
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="Enyo">
+      
+        <option value="115">Enyo (nightly)</option>
+      
+        <option value="299">Enyo 2.7.0</option>
+      
+        <option value="238">Enyo 2.5.1</option>
+      
+        <option value="214">Enyo 2.4.0</option>
+      
+        <option value="145">Enyo 2.2.0</option>
+      
+        <option value="121">Enyo 2.1</option>
+      
+        <option value="116">Enyo 2.0.1</option>
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="ExtJS">
+      
+        <option value="338">ExtJS 6.2.0</option>
+      
+        <option value="256">ExtJS 5.1.0</option>
+      
+        <option value="258">ExtJS 5.0.0</option>
+      
+        <option value="147">ExtJS 4.2.0</option>
+      
+        <option value="80">ExtJS 4.1.1</option>
+      
+        <option value="107">ExtJS 4.1.0</option>
+      
+        
+      
+        <option value="109">ExtJS 3.4.0</option>
+      
+        <option value="23">ExtJS 3.1.0</option>
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="FabricJS">
+      
+        <option value="380">FabricJS 1.7.20</option>
+      
+        <option value="378">FabricJS 1.7.15</option>
+      
+        <option value="342">FabricJS 1.7.7</option>
+      
+        
+      
+        <option value="250">FabricJS 1.5.0</option>
+      
+        
+      
+        
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="Glow">
+      
+        
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="Inferno">
+      
+        <option value="336">Inferno 1.0.0-beta9</option>
+      
+    </optgroup>
+    
+    <optgroup label="jQuery">
+      
+        
+      
+        
+      
+        <option value="46">jQuery (edge)</option>
+      
+        <option value="376">jQuery 3.2.1</option>
+      
+        
+      
+        <option value="333">jQuery 3.1.1</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        <option value="319">jQuery 2.2.4</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        <option value="248">jQuery 2.1.3</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        <option value="131">jQuery 1.9.1</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="jQuery Slim">
+      
+        <option value="335">jQuery Slim 3.1.1 Slim</option>
+      
+        <option value="323">jQuery Slim 3.1.0 Slim</option>
+      
+        <option value="313">jQuery Slim 3.0.0 Slim</option>
+      
+    </optgroup>
+    
+    <optgroup label="JSBlocks">
+      
+        <option value="252">JSBlocks (edge)</option>
+      
+    </optgroup>
+    
+    <optgroup label="jTypes">
+      
+        <option value="165">jTypes 2.1.0</option>
+      
+    </optgroup>
+    
+    <optgroup label="KineticJS">
+      
+        <option value="139">KineticJS 4.3.1</option>
+      
+        <option value="124">KineticJS 4.0.5</option>
+      
+    </optgroup>
+    
+    <optgroup label="Knockout.js">
+      
+        <option value="277">Knockout.js 3.4.0</option>
+      
+        <option value="172">Knockout.js 3.0.0</option>
+      
+        <option value="163">Knockout.js 2.3.0</option>
+      
+        <option value="122">Knockout.js 2.2.1</option>
+      
+        <option value="117">Knockout.js 2.1.0</option>
+      
+        <option value="104">Knockout.js 2.0.0</option>
+      
+    </optgroup>
+    
+    <optgroup label="Lo-Dash">
+      
+        <option value="167">Lo-Dash 2.2.1</option>
+      
+    </optgroup>
+    
+    <optgroup label="Minified">
+      
+        <option value="164">Minified 1.0 beta1</option>
+      
+    </optgroup>
+    
+    <optgroup label="MithrilJS">
+      
+        <option value="273">MithrilJS 0.2.0</option>
+      
+    </optgroup>
+    
+    <optgroup label="Mootools">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        <option value="59">Mootools (nightly)</option>
+      
+        <option value="327">Mootools 1.6.0 (compat)</option>
+      
+        <option value="325">Mootools 1.6.0</option>
+      
+        <option value="329">Mootools 1.5.2 (compat)</option>
+      
+        <option value="263">Mootools 1.5.2</option>
+      
+        
+      
+        
+      
+        <option value="216">Mootools 1.5.1</option>
+      
+        
+      
+        <option value="208">Mootools 1.5.0</option>
+      
+        <option value="96">Mootools 1.4.5 (compat)</option>
+      
+        <option value="95">Mootools 1.4.5</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        <option value="63">Mootools 1.3.2 (compat)</option>
+      
+        <option value="62">Mootools 1.3.2</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="No-Library">
+      
+        <option value="11" selected="selected">No-Library (pure JS)</option>
+      
+    </optgroup>
+    
+    <optgroup label="OpenUI5">
+      
+        <option value="271">OpenUI5 (latest, mobile)</option>
+      
+    </optgroup>
+    
+    <optgroup label="Paper.js">
+      
+        <option value="158">Paper.js 0.22</option>
+      
+    </optgroup>
+    
+    <optgroup label="Pixi">
+      
+        <option value="331">Pixi 4.0.0</option>
+      
+        <option value="315">Pixi 3.0.11</option>
+      
+    </optgroup>
+    
+    <optgroup label="Processing.js">
+      
+        <option value="206">Processing.js 1.4.7</option>
+      
+        <option value="135">Processing.js 1.4.1</option>
+      
+        <option value="81">Processing.js 1.3.6</option>
+      
+        <option value="67">Processing.js 1.2.3</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="Prototype">
+      
+        
+      
+        <option value="265">Prototype 1.7.3</option>
+      
+        
+      
+        
+      
+        <option value="4">Prototype 1.6.1.0</option>
+      
+    </optgroup>
+    
+    <optgroup label="qooxdoo">
+      
+        <option value="126">qooxdoo 2.1</option>
+      
+        <option value="127">qooxdoo 2.0.3</option>
+      
+    </optgroup>
+    
+    <optgroup label="RactiveJS">
+      
+        
+      
+        
+      
+        <option value="287">RactiveJS 0.7.3</option>
+      
+    </optgroup>
+    
+    <optgroup label="Raphael">
+      
+        <option value="76">Raphael 2.1.0</option>
+      
+        <option value="36">Raphael 1.5.2 (min)</option>
+      
+        <option value="30">Raphael 1.4</option>
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="React">
+      
+        <option value="285">React 0.14.3</option>
+      
+        <option value="192">React 0.9.0</option>
+      
+        <option value="184">React 0.8.0</option>
+      
+        <option value="166">React 0.4.0</option>
+      
+        <option value="159">React 0.3.2</option>
+      
+    </optgroup>
+    
+    <optgroup label="RightJS">
+      
+        <option value="136">RightJS 2.3.1</option>
+      
+        <option value="45">RightJS 2.1.1</option>
+      
+    </optgroup>
+    
+    <optgroup label="Riot">
+      
+        <option value="382">Riot 3.7.4</option>
+      
+    </optgroup>
+    
+    <optgroup label="Shipyard">
+      
+        <option value="99">Shipyard (nightly)</option>
+      
+        <option value="105">Shipyard 0.2</option>
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="svg.js">
+      
+        <option value="346">svg.js 2.5.0</option>
+      
+        <option value="348">svg.js 2.4.0</option>
+      
+        <option value="350">svg.js 2.3.7</option>
+      
+        <option value="352">svg.js 2.2.5</option>
+      
+        <option value="269">svg.js 2.1.1</option>
+      
+        <option value="354">svg.js 2.0.5</option>
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="The X Toolkit">
+      
+        <option value="106">The X Toolkit edge</option>
+      
+    </optgroup>
+    
+    <optgroup label="Thorax">
+      
+        <option value="174">Thorax 2.0.0rc6</option>
+      
+        <option value="143">Thorax 2.0.0rc3</option>
+      
+    </optgroup>
+    
+    <optgroup label="Three.js">
+      
+        <option value="82">Three.js r54</option>
+      
+    </optgroup>
+    
+    <optgroup label="Underscore">
+      
+        <option value="267">Underscore 1.8.3</option>
+      
+        <option value="160">Underscore 1.4.4</option>
+      
+        <option value="133">Underscore 1.4.3</option>
+      
+        <option value="111">Underscore 1.3.3</option>
+      
+    </optgroup>
+    
+    <optgroup label="Vue">
+      
+        <option value="236">Vue (edge)</option>
+      
+        <option value="344">Vue 2.2.1</option>
+      
+        <option value="289">Vue 1.0.12</option>
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="WebApp Install">
+      
+        <option value="142">WebApp Install 0.1</option>
+      
+    </optgroup>
+    
+    <optgroup label="YUI">
+      
+        
+      
+        <option value="230">YUI 3.17.2</option>
+      
+        <option value="204">YUI 3.16.0</option>
+      
+        <option value="182">YUI 3.14.0</option>
+      
+        <option value="153">YUI 3.10.1</option>
+      
+        
+      
+        <option value="130">YUI 3.8.0</option>
+      
+        <option value="123">YUI 3.7.3</option>
+      
+        <option value="118">YUI 3.6.0</option>
+      
+        <option value="102">YUI 3.5.0</option>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        <option value="9">YUI 2.8.0r4</option>
+      
+        
+      
+    </optgroup>
+    
+    <optgroup label="Zepto">
+      
+        <option value="90">Zepto 1.0rc1</option>
+      
+    </optgroup>
+    
+  </select>
+  <label for="js_lib"><i class="bts bt-angle-down"></i></label>
+</div>
+
+<ul id="js_dependency">
+  
+
+</ul>
+
+    
+  
+</div>
+
+<!-- <div class="panelExtrasChoice">
+  <div class="selectCont">
+    <select name="js_lib" id="js_lib">
+      <optgroup label="CreateJS">
+          <option value="279">CreateJS 2015.05.21</option>
+          <option value="170">CreateJS 2013.09.25</option>
+      </optgroup>
+
+      <optgroup label="D3">
+          <option value="134">D3 3.x</option>
+      </optgroup>
+
+      <optgroup label="Dojo">
+          <option value="87">Dojo (nightly)</option>
+          <option value="356">Dojo 1.12.2</option>
+      </optgroup>
+    </select>
+  </div>
+
+  <ul id="js_dependency">
+    <li>
+      <label class="checkboxCont">
+        <input id="dep_119" type="checkbox" name="js_dependency[119]" value="119">
+        <span class="checkbox"><i class="bts bt-check"></i></span>Mootools More 1.4.0.1 (compat)
+      </label>
+    </li>
+    <li>
+      <label class="checkboxCont">
+        <input id="dep_165" type="checkbox" name="js_dependency[165]" value="165">
+        <span class="checkbox"><i class="bts bt-check"></i></span>PowerTools 1.2.0
+      </label>
+    </li>
+  </ul>
+</div> -->
+
+<h3>Load type</h3>
+<div class="selectCont">
+  <select name="js_wrap" id="id_js_wrap">
+<option value="l" selected="selected">onLoad</option>
+<option value="d">onDomready</option>
+<option value="h">No wrap - in &lt;head&gt;</option>
+<option value="b">No wrap - in &lt;body&gt;</option>
+</select>
+</div>
+
+
+  <h3>Framework &lt;script&gt; attribute</h3>
+  <p class="libraryTagAttributes">
+    <label>
+      <input id="id_js_lib_option" type="text" name="js_lib_option" maxlength="255" placeholder="ie. data-type=&quot;&quot;" value="">
+    </label>
+  </p>
+
+
+<script type="text/javascript">
+  window.addEvent('load', function() {
+    $('js_lib').addEvent('change', function() {
+      mooshell.loadDependencies(this.value);
+    })
+    if ($('library_group')) $('library_group').addEvent('change', function() {
+      mooshell.loadLibraryVersions(this.value);
+    })
+  });
+</script>
+
+</div> <!-- /windowSettings -->
+
+<div class="windowSettings css" data-panel="css">
+  <h3>Language</h3>
+<div class="selectCont">
+  <select name="panel_css" class="panelChoice" id="panel_css_choice" data-panel_id="id_code_css" data-panel="css">
+    
+      <option data-mime-type="text/x-scss" value="0" selected="">CSS</option>
+    
+      <option data-mime-type="text/x-scss" value="1">SCSS</option>
+    
+  </select>
+  <label for="js_lib"><i class="bts bt-angle-down"></i></label>
+</div> <!-- /selectCont -->
+
+<h3>Options</h3>
+<p id="normalize_check">
+  <label class="checkboxCont"><input type="checkbox" name="normalize_css" id="id_normalize_css"><span class="checkbox"><i class="bts bt-check"></i></span> Normalized CSS</label>
+</p>
+
+</div> <!-- /windowSettings -->
+
+        </div>
+      
+    </form>
+
+    
+
+<script>
+  TogetherJSConfig_enableAnalytics = true;
+  TogetherJSConfig_cloneClicks = "#run, .toggler";
+  TogetherJSConfig_toolName = "Collaboration"
+</script>
+<script defer="" src="./Edit fiddle - JSFiddle_files/togetherjs.js"></script>
+
+    
+
+  
+
+<span class="CodeMirror-error-tooltip"></span></body></html>
