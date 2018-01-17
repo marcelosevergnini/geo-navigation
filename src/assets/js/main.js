@@ -140,7 +140,7 @@ var demo = (function() {
         creaSkyBox();
         setMarker(dataList);
         setControls();
-        UTIL.Functions.setGuiObjectRotation(cameraContainer.camera);
+        //UTIL.Functions.setGuiObjectRotation(cameraContainer.camera);
         createTweens();
         tweens.runners[tweens.processId].delay(3000).start();
         animate();
