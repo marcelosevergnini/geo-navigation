@@ -72,6 +72,7 @@ var demo = (function() {
     animate = function (time) {
         requestAnimationFrame(animate);
         updateTasks(time);
+        earthObject.cloudsMesh.rotation.y += 0.0003;
         updateScene();
     },
     setCamera = function(){
@@ -92,7 +93,7 @@ var demo = (function() {
         setMarker(dataList);
         setControls();
         //UTIL.Functions.setGuiObjectRotation(cameraContainer.camera);
-        TWEENS.runners.createTweensObjectByGeoPosition(dataList, objectToMove);
+        TWEENS.runners.createTweensByGeoPosition(dataList, cameraContainer);
         TWEENS.runners.runnersContainer[TWEENS.runners.processId].delay(3000).start();
         animate();
     }

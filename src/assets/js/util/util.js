@@ -3,9 +3,18 @@ var UTIL = UTIL || {}
 UTIL.Functions	= {}
 
 UTIL.Functions.convertLatLonToVec3	= function(lat,lon){
-    lat =  lat * Math.PI / 180.0;
-    lon = -lon * Math.PI / 180.0;
-    return new THREE.Vector3(Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon));
+    //lat =  lat * Math.PI / 180.0;
+    //lon = -lon * Math.PI / 180.0;
+    //return new THREE.Vector3(Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon));
+    var radius = 1.2;
+    var phi   = (90-lat)*(Math.PI/180);
+    var theta = (lon+180)*(Math.PI/180);
+
+    x = -((radius) * Math.sin(phi)*Math.cos(theta));
+    y = ((radius) * Math.cos(phi));
+    z = ((radius) * Math.sin(phi)*Math.sin(theta));
+
+    return new THREE.Vector3(x, y, z);
 }
 
 UTIL.Functions.createMarker = function(){
