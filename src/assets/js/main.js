@@ -51,7 +51,7 @@ var demo = (function() {
         container.appendChild(renderer.domElement);
     },
     setControls = function () {
-        controls = new THREE.TrackballControls(cameraContainer.camera);
+        controls = new THREE.OrbitControls(cameraContainer.camera);
     },
     lights = function () {
         var lightA = new THREE.DirectionalLight(0xffffff);
