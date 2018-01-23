@@ -1,7 +1,6 @@
 Vue.component("card", {
     template: `
 
-   
         <div class="card">
             <div class="card-content"> 
                 <div class="content">
@@ -9,7 +8,6 @@ Vue.component("card", {
                 </div>
             </div>
         </div>
-
     `,
     data(){
         return {test:[]};

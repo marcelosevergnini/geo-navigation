@@ -3,39 +3,40 @@ var TWEENS = TWEENS || {}
 TWEENS.runners	= {}
 TWEENS.runners.runnersContainer = [];
 TWEENS.runners.processId = 0;
+TWEENS.runners.transitionSpaceSpeed = 4000;
+TWEENS.runners.transitionToTargetSpeed = 1000;
 
-TWEENS.runners.createTweensByGeoPosition = function(dataList, cameraContainer, onStartExec, onCompleteExec){
+TWEENS.runners.createTweensByGeoPosition = function(dataList, cameraContainer){
 
-    TWEENS.runners.originalPosition = new TWEEN.Tween(cameraContainer.camera.position).to(cameraContainer.cameraOriginalPosition, 3000).easing(TWEEN.Easing.Quadratic.In)
-    .onStart(function(){
-
-    })
-    .onComplete(function(){
-        TWEENS.runners.processId += 1;
-        if(TWEENS.runners.processId > dataList.length){
-            TWEENS.runners.processId = 1;
-        }
-        TWEENS.runners.runnersContainer[TWEENS.runners.processId].delay(1000).start();
-    });
+    var radiusToTarget = 1.3, radiusSpaceView = 3.5;
 
     dataList.forEach(function(element) {
-        var currentPosition = UTIL.Functions.convertLatLonToVec3(element.latitude,element.longitude).multiplyScalar(52.5);
-        //var current = { x: cameraContainer.camera.position.x, y: cameraContainer.camera.position.y, z: cameraContainer.camera.position.z  };
-        //var target = { x: (currentPosition.x), y: (currentPosition.y), z: 0};
-        var currentTween = new TWEEN.Tween(cameraContainer.camera.position).to(currentPosition, 2000).easing(TWEEN.Easing.Quadratic.In)
-        .onStart(function(){
+        
+        var targetPosition = UTIL.Functions.convertLatLonToVec3(element.latitude,element.longitude, radiusToTarget, radiusSpaceView);
 
-        })
+        var goToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, TWEENS.runners.transitionSpaceSpeed ).easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(function(){cameraContainer.camera.updateProjectionMatrix()});
+
+        var gotToTargetView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.targetView, TWEENS.runners.transitionToTargetSpeed ).easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(function(){cameraContainer.camera.updateProjectionMatrix()})
+
+        var backToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, TWEENS.runners.transitionToTargetSpeed ).easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(function(){cameraContainer.camera.updateProjectionMatrix()})
         .onComplete(function(){
-            
+            TWEENS.runners.processId += 1;
+            if(TWEENS.runners.processId > dataList.length){
+                TWEENS.runners.processId = 1;
+            }
+            TWEENS.runners.runnersContainer[TWEENS.runners.processId].start();
         });
         
-        currentTween.chain(TWEENS.runners.originalPosition.delay(3000));
-        TWEENS.runners.runnersContainer.push(currentTween);
+        goToSpaceView.chain(gotToTargetView.chain(backToSpaceView.delay(4000)));
+
+        TWEENS.runners.runnersContainer.push(goToSpaceView);
     });  
 }
 
-TWEENS.runners.createTweensObjectByGeoPosition = function(dataList, objectToMove, onStartExec, onCompleteExec){
+TWEENS.runners.createTweensObjectByGeoPosition = function(dataList, objectToMove){
 
     dataList.forEach(function(element) {
 

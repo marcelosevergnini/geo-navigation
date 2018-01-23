@@ -13,28 +13,18 @@ var demo = (function() {
         earthObject.earthMesh = PLANET_UTIL.Planets.createEarth();
         earthObject.cloudsMesh = PLANET_UTIL.Planets.createEarthCloud();
         earthObject.earth = new THREE.Object3D();
-        var sphereAxis = new THREE.AxesHelper(100);
         earthObject.earth.add(earthObject.earthMesh);
         earthObject.earth.add(earthObject.cloudsMesh);
-        earthObject.earth.add(sphereAxis);
         objectGroup.add(earthObject.earth);
+        objectGroup.add(PLANET_UTIL.Planets.createSkyBox());
         scene.add(objectGroup);
-    },
-    createSkyBox = function(){
-   
-        var texture	= new THREE.TextureLoader().load('src/assets/textures/galaxy_starfield.png')
-        var material = new THREE.MeshBasicMaterial({map	: texture, side : THREE.BackSide})
-        var geometry = new THREE.SphereGeometry(1000, 32, 32)
-        var mesh = new THREE.Mesh(geometry, material)
-        objectGroup.add(mesh);
-
     },
     setMarker = function(listBranchList){
 
         var rad = Math.PI / 180;
               
         listBranchList.forEach(function(element) {
-            var marker = UTIL.Functions.createPin();    
+            var marker = UTIL.Functions.createPin(0.002, 0.002, 0.002);    
             marker.name = element.nameBranch.replace(/ /g, '-').toLowerCase();
             marker.quaternion.setFromEuler(new THREE.Euler(0, element.longitude * rad, element.latitude * rad, "YZX")); 
             markers.push(marker);
@@ -50,6 +40,8 @@ var demo = (function() {
     },
     setControls = function () {
         controls = new THREE.OrbitControls(cameraContainer.camera);
+        controls.minDistance = 65;
+        controls.maxDistance = 230;
     },
     lights = function () {
         var lightA = new THREE.DirectionalLight(0xffffff);
@@ -70,7 +62,7 @@ var demo = (function() {
     animate = function (time) {
         requestAnimationFrame(animate);
         updateTasks(time);
-        earthObject.cloudsMesh.rotation.y += 0.0003;
+        earthObject.cloudsMesh.rotation.y += 0.0001;
         updateScene();
     },
     setCamera = function(){
@@ -81,16 +73,15 @@ var demo = (function() {
       
     },
     init = function () {
-
-        container = document.getElementById("container");
+        container = document.createElement("div");
+        container.setAttribute("id", "container_webgl");
+        document.getElementsByClassName("render-container")[0].appendChild(container);
         loadRender();
         lights();
         createGeometry();    
         setCamera();
-        createSkyBox();
         setMarker(dataList);
         setControls();
-        //UTIL.Functions.setGuiObjectRotation(cameraContainer.camera);
         TWEENS.runners.createTweensByGeoPosition(dataList, cameraContainer);
         TWEENS.runners.runnersContainer[TWEENS.runners.processId].delay(3000).start();
         animate();

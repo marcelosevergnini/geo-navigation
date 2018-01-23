@@ -2,19 +2,22 @@ var UTIL = UTIL || {}
 
 UTIL.Functions	= {}
 
-UTIL.Functions.convertLatLonToVec3	= function(lat,lon){
-    //lat =  lat * Math.PI / 180.0;
-    //lon = -lon * Math.PI / 180.0;
-    //return new THREE.Vector3(Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon));
-    var radius = 1.2;
-    var phi   = (90-lat)*(Math.PI/180);
-    var theta = (lon+180)*(Math.PI/180);
+UTIL.Functions.convertLatLonToVec3	= function(lat, lon, radiusToTarget, radiusSpaceView){
 
-    x = -((radius) * Math.sin(phi)*Math.cos(theta));
-    y = ((radius) * Math.cos(phi));
-    z = ((radius) * Math.sin(phi)*Math.sin(theta));
+    var phi   = (90-lat) * (Math.PI/180);
+    var theta = (lon+180) * (Math.PI/180);
 
-    return new THREE.Vector3(x, y, z);
+    var objectTarget = {};
+    
+    objectTarget.targetView = new THREE.Vector3(
+        (-((radiusToTarget) * Math.sin(phi)*Math.cos(theta))), (((radiusToTarget) * Math.cos(phi))), ((radiusToTarget) * Math.sin(phi)*Math.sin(theta))
+    ).multiplyScalar(52.5)
+    
+    objectTarget.spaceViewTarget = new THREE.Vector3(
+        (-((radiusSpaceView) * Math.sin(phi)*Math.cos(theta))), ((radiusSpaceView) * Math.cos(phi)), ((radiusSpaceView) * Math.sin(phi)*Math.sin(theta))
+    ).multiplyScalar(52.5);
+   
+    return objectTarget;
 }
 
 UTIL.Functions.createMarker = function(){
@@ -26,7 +29,7 @@ UTIL.Functions.createMarker = function(){
     return marker;
 }
 
-UTIL.Functions.createPin = function(){
+UTIL.Functions.createPin = function(scaleX, scaleY, scaleZ){
     var marker = new THREE.Object3D();
         var loader = new THREE.OBJLoader();
         loader.load( 'src/assets/models/Pin.obj', function ( object ) {
@@ -42,8 +45,8 @@ UTIL.Functions.createPin = function(){
                     geometry.mergeVertices();
                     geometry.computeVertexNormals();
                     child.geometry = new THREE.BufferGeometry().fromGeometry( geometry );
-                    object.scale.set(0.005,0.005,0.005);
-                    object.position.set(51, 0, 0);
+                    object.scale.set(scaleX, scaleY, scaleZ);
+                    object.position.set(50.2, 0, 0);
                     object.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(1, 0, 0));
                 }
             });
@@ -57,7 +60,7 @@ UTIL.Functions.createPin = function(){
 
 UTIL.Functions.setGuiObjectRotation = function(object){
     var gui = new dat.GUI();     
-    gui.add( {z: 1}, 'z', -200, 200 ).step(5).onChange( function( value ){ object.fov = value;});
+    gui.add( {z: 1}, 'z', -200, 200 ).step(5).onChange( function( value ){ object.rotation.z = value;});
     gui.add( {x: 1}, 'x', -200, 200 ).step(6).onChange( function( value ){object.rotation.x = value;});
     gui.add( {y: 1}, 'y', -200, 200 ).step(7).onChange( function( value ){object.rotation.y = value;});
 }
