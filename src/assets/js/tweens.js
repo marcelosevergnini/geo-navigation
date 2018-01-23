@@ -6,12 +6,12 @@ TWEENS.runners.processId = 0;
 
 TWEENS.runners.createTweensByGeoPosition = function(dataList, cameraContainer, onStartExec, onCompleteExec){
 
-    TWEENS.runners.originalPosition = new TWEEN.Tween(cameraContainer.camera.position).to(cameraContainer.cameraOriginalPosition, 3000).easing(TWEEN.Easing.Quadratic.Out)
+    TWEENS.runners.originalPosition = new TWEEN.Tween(cameraContainer.camera.position).to(cameraContainer.cameraOriginalPosition, 3000).easing(TWEEN.Easing.Quadratic.In)
     .onStart(function(){
 
     })
     .onComplete(function(){
-        TWEENS.runners.processId = TWEENS.runners.processId + 1;
+        TWEENS.runners.processId += 1;
         if(TWEENS.runners.processId > dataList.length){
             TWEENS.runners.processId = 1;
         }
@@ -22,18 +22,15 @@ TWEENS.runners.createTweensByGeoPosition = function(dataList, cameraContainer, o
         var currentPosition = UTIL.Functions.convertLatLonToVec3(element.latitude,element.longitude).multiplyScalar(52.5);
         //var current = { x: cameraContainer.camera.position.x, y: cameraContainer.camera.position.y, z: cameraContainer.camera.position.z  };
         //var target = { x: (currentPosition.x), y: (currentPosition.y), z: 0};
-        var currentTween = new TWEEN.Tween(cameraContainer.camera.position).to(currentPosition, 2000).easing(TWEEN.Easing.Back.InOut)
+        var currentTween = new TWEEN.Tween(cameraContainer.camera.position).to(currentPosition, 2000).easing(TWEEN.Easing.Quadratic.In)
         .onStart(function(){
 
         })
         .onComplete(function(){
-            TWEENS.runners.processId = TWEENS.runners.processId + 1;
-            if(TWEENS.runners.processId > dataList.length){
-                TWEENS.runners.processId = 1;
-            }
-            TWEENS.runners.runnersContainer[TWEENS.runners.processId].delay(1000).start();
+            
         });
         
+        currentTween.chain(TWEENS.runners.originalPosition.delay(3000));
         TWEENS.runners.runnersContainer.push(currentTween);
     });  
 }
