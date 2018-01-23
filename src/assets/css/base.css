@@ -1,13 +1,7 @@
-.elementToFadeInAndOut {
-    -webkit-animation: fadeinout 4s linear forwards;
-    animation: fadeinout 4s linear forwards;
-    opacity: 0;
+.render-container{
+  z-index: 1; position: absolute;
 }
 
-@-webkit-keyframes fadeinout {
-  50% { opacity: 1; }
-}
-
-@keyframes fadeinout {
-  50% { opacity: 1; }
+.data-container{
+  z-index: 2; position: relative;
 }

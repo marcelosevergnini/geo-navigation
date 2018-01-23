@@ -19,6 +19,15 @@ PLANET_UTIL.Planets.createEarth	= function(){
 	return mesh	
 }
 
+PLANET_UTIL.Planets.createSkyBox = function(){
+   
+	var texture	= new THREE.TextureLoader().load('src/assets/textures/galaxy_starfield.png');
+	var material = new THREE.MeshBasicMaterial({map	: texture, side : THREE.BackSide});
+	var geometry = new THREE.SphereGeometry(1000, 32, 32);
+	var mesh = new THREE.Mesh(geometry, material);
+	return mesh;
+}
+
 PLANET_UTIL.Planets.createEarthCloud	= function(){
 	// create destination canvas
 	var canvasResult	= document.createElement('canvas')
@@ -27,7 +36,7 @@ PLANET_UTIL.Planets.createEarthCloud	= function(){
 	var contextResult	= canvasResult.getContext('2d')		
 
 	// load earthcloudmap
-	var imageMap	= new Image();
+	var imageMap = new Image();
 	imageMap.addEventListener("load", function() {
 		
 		// create dataMap ImageData for earthcloudmap
