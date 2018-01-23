@@ -18,8 +18,6 @@ var demo = (function() {
         earthObject.earth.add(earthObject.cloudsMesh);
         earthObject.earth.add(sphereAxis);
         objectGroup.add(earthObject.earth);
-        objectToMove = UTIL.Functions.createSimpleSphere(0.5, 32, 32, 0, 0, 130);
-        objectGroup.add(objectToMove);
         scene.add(objectGroup);
     },
     createSkyBox = function(){
