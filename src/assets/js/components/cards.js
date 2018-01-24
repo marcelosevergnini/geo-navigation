@@ -8,6 +8,7 @@ Vue.component("card", {
                 </div>
             </div>
         </div>
+        
     `,
     data(){
         return {test:[]};
