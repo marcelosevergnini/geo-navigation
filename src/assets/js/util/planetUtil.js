@@ -11,7 +11,6 @@ PLANET_UTIL.Planets.createEarth	= function(){
 		bumpMap		: new THREE.TextureLoader().load(PLANET_UTIL.Planets.baseURL + 'world-big.jpg'),
 		bumpScale	: 0.05,
 		shininess: 100,
-    	//flatShading: THREE.SmoothShading,
 		specularMap	: new THREE.TextureLoader().load(PLANET_UTIL.Planets.baseURL + 'world-big.jpg'),
 		specular	: new THREE.Color('grey'),
 	})
