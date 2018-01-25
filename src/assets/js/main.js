@@ -33,7 +33,7 @@ var demo = (function() {
 
     },
     loadRender = function () {
-        renderer = new THREE.WebGLRenderer();
+        renderer = new THREE.WebGLRenderer({ antialias: false });
         renderer.setClearColor(0xf0f0f0);
         renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT, false);
         container.appendChild(renderer.domElement);
