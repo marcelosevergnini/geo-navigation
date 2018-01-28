@@ -4,30 +4,37 @@ PLANET_UTIL.Planets	= {}
 
 PLANET_UTIL.Planets.baseURL	= 'src/assets/textures/'
 
-PLANET_UTIL.Planets.createEarth	= function(){
+PLANET_UTIL.Planets.createEarth	= function(manager){
+
+	var mapLoader = new THREE.TextureLoader(manager).load(PLANET_UTIL.Planets.baseURL + 'world-big.jpg');
+	var bumpMapLoader = new THREE.TextureLoader(manager).load(PLANET_UTIL.Planets.baseURL + 'world-big.jpg');
+	var specularMapLoader = new THREE.TextureLoader(manager).load(PLANET_UTIL.Planets.baseURL + 'world-big.jpg');
+
 	var geometry	= new THREE.SphereGeometry(50, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
-		map		: new THREE.TextureLoader().load(PLANET_UTIL.Planets.baseURL + 'world-big.jpg'),
-		bumpMap		: new THREE.TextureLoader().load(PLANET_UTIL.Planets.baseURL + 'world-big.jpg'),
+		map			: mapLoader,
+		bumpMap		: bumpMapLoader,
 		bumpScale	: 0.05,
 		shininess: 100,
-		specularMap	: new THREE.TextureLoader().load(PLANET_UTIL.Planets.baseURL + 'world-big.jpg'),
+		specularMap	: specularMapLoader,
 		specular	: new THREE.Color('grey'),
 	})
 	var mesh	= new THREE.Mesh(geometry, material)
 	return mesh	
+	
 }
 
-PLANET_UTIL.Planets.createSkyBox = function(){
+PLANET_UTIL.Planets.createSkyBox = function(manager){
    
-	var texture	= new THREE.TextureLoader().load('src/assets/textures/galaxy_starfield.png');
+	var texture	= new THREE.TextureLoader(manager).load('src/assets/textures/galaxy_starfield.png');
 	var material = new THREE.MeshBasicMaterial({map	: texture, side : THREE.BackSide});
 	var geometry = new THREE.SphereGeometry(1000, 32, 32);
 	var mesh = new THREE.Mesh(geometry, material);
 	return mesh;
 }
 
-PLANET_UTIL.Planets.createEarthCloud	= function(){
+PLANET_UTIL.Planets.createEarthCloud = function(manager){
+
 	// create destination canvas
 	var canvasResult	= document.createElement('canvas')
 	canvasResult.width	= 1024
@@ -71,12 +78,13 @@ PLANET_UTIL.Planets.createEarthCloud	= function(){
 			material.map.needsUpdate = true;
 		})
 		imageTrans.src	= PLANET_UTIL.Planets.baseURL + 'earthcloudmaptrans.jpg';
+
 	}, false);
 	imageMap.src	= PLANET_UTIL.Planets.baseURL + 'earthcloudmap.jpg';
 
 	var geometry	= new THREE.SphereGeometry(50.5, 32, 32)
 	var material	= new THREE.MeshPhongMaterial({
-		map		: new THREE.Texture(canvasResult),
+		map		: new THREE.Texture(canvasResult, ),
 		side		: THREE.DoubleSide,
 		transparent	: true,
 		opacity		: 0.8,
@@ -84,8 +92,6 @@ PLANET_UTIL.Planets.createEarthCloud	= function(){
 	var mesh	= new THREE.Mesh(geometry, material)
 	return mesh	
 }
-
-
 
 PLANET_UTIL.Planets._RingGeometry = function ( innerRadius, outerRadius, thetaSegments ) {
 
