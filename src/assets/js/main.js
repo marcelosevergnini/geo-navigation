@@ -2,21 +2,37 @@ var demo = (function() {
 
     "use strict";
 
-    var container, camera, scene = new THREE.Scene(), controls, renderer, stats, renderer, markers = [];
+    var container, scene = new THREE.Scene(), controls, renderer, stats, renderer, markers = [];
     var cameraContainer = {}
     var CANVAS_WIDTH = window.innerWidth,CANVAS_HEIGHT = window.innerHeight;
     var objectGroup = new THREE.Object3D();
     var earthObject = {}
-    var objectToMove;
+    var loadManager;
+    var progress = {}
 
-    var createGeometry = function(){
-        earthObject.earthMesh = PLANET_UTIL.Planets.createEarth();
-        earthObject.cloudsMesh = PLANET_UTIL.Planets.createEarthCloud();
+    var createLoadManager = function(){
+
+        var onLoad = function () { 
+            document.getElementById("start-container").setAttribute("class", "field is-grouped is-grouped-centered");
+        };
+        loadManager = new THREE.LoadingManager(onLoad);
+        
+        loadManager.onProgress = function(url, itemsLoaded, itemsTotal) {
+            document.getElementById("progress-bar").setAttribute("value",   (itemsLoaded / itemsTotal * 100));
+            document.getElementById("progress-bar").innerHTML = ((itemsLoaded / itemsTotal * 100) + '%');
+        };  
+        loadManager.onError = function(url) {
+            console.log('Error loading texture: ' + url);
+        };
+    },  
+    createGeometry = function(){
+        earthObject.earthMesh = PLANET_UTIL.Planets.createEarth(loadManager);
+        earthObject.cloudsMesh = PLANET_UTIL.Planets.createEarthCloud(loadManager);
         earthObject.earth = new THREE.Object3D();
         earthObject.earth.add(earthObject.earthMesh);
         earthObject.earth.add(earthObject.cloudsMesh);
         objectGroup.add(earthObject.earth);
-        objectGroup.add(PLANET_UTIL.Planets.createSkyBox());
+        objectGroup.add(PLANET_UTIL.Planets.createSkyBox(loadManager));
         scene.add(objectGroup);
     },
     setMarker = function(listBranchList){
@@ -24,7 +40,7 @@ var demo = (function() {
         var rad = Math.PI / 180;
               
         listBranchList.forEach(function(element) {
-            var marker = UTIL.Functions.createPin(0.002, 0.002, 0.002);    
+            var marker = UTIL.Functions.createPin(loadManager, 0.002, 0.002, 0.002);    
             marker.name = element.nameBranch.replace(/ /g, '-').toLowerCase();
             marker.quaternion.setFromEuler(new THREE.Euler(0, element.longitude * rad, element.latitude * rad, "YZX")); 
             markers.push(marker);
@@ -73,6 +89,7 @@ var demo = (function() {
       
     },
     init = function () {
+        createLoadManager();
         container = document.createElement("div");
         container.setAttribute("id", "container_webgl");
         document.getElementsByClassName("render-container")[0].appendChild(container);
@@ -80,12 +97,19 @@ var demo = (function() {
         lights();
         createGeometry();    
         setCamera();
-        setMarker(dataList);
         setControls();
         TWEENS.runners.createTweensByGeoPosition(dataList, cameraContainer);
-        TWEENS.runners.runnersContainer[TWEENS.runners.processId].delay(3000).start();
+        setMarker(dataList);
         animate();
     }
+
+    document.getElementById("start-container").addEventListener("click", function(event) {
+        var parent = document.getElementById("app");
+        parent.querySelectorAll('.is-invisible')[0].removeAttribute("class", "is-invisible")
+        
+        parent.removeChild(parent.querySelectorAll('.progress-countainer')[0]);
+        TWEENS.runners.runnersContainer[TWEENS.runners.processId].delay(500).start();
+    });
 
     window.onload = init;
     
