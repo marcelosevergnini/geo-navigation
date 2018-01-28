@@ -29,9 +29,9 @@ UTIL.Functions.createMarker = function(){
     return marker;
 }
 
-UTIL.Functions.createPin = function(scaleX, scaleY, scaleZ){
+UTIL.Functions.createPin = function(manager, scaleX, scaleY, scaleZ){
     var marker = new THREE.Object3D();
-        var loader = new THREE.OBJLoader();
+        var loader = new THREE.OBJLoader(manager);
         loader.load( 'src/assets/models/Pin.obj', function ( object ) {
             object.traverse( function ( child ) {
                 if (child instanceof THREE.Mesh ) {
