@@ -1,10 +1,73 @@
  <!DOCTYPE html>
  <html>
  <head>
-        <meta charset="utf-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <title>Testing ThreeJS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Geo Navigation</title>
+    <link rel="shortcut icon" href="/src/assets/textures/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.css"></link>
+    <link rel="stylesheet" type="text/css" href="/src/assets/css/base.css"></link>
+   
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112981926-1"></script>
+    <script>
+         window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-112981926-1');
+    </script>
+ </head>
+ <body>
+
+     <div id="app">
+        <div class="progress-countainer">
+            <div class="is-active modal">
+                <div class="modal-background"></div>
+                    <div class="modal-content">
+                        <div class="columns">
+                            <div class="column">
+                                <span class="loading-label">Loading...</span>
+                                <progress id="progress-bar" class="progress is-primary" value="" max="100"></progress>
+                            </div>
+                        </div>
+                        <div id="start-container" class="is-invisible">
+                            <p class="control">
+                                <button class="button is-primary is-medium">
+                                        <span class="icon is-medium">
+                                          <i class="fas fa-heading fa-2x"></i>
+                                        </span>
+                                        Click to Start
+                                </button>
+                            </p>
+                            
+                        </div>
+                        
+
+                        <p class="image is-4by3">
+                            <!-- Image by <a href='https://www.freepik.com/free-vector/world-map-background-in-abstract-style_770809.htm'>Designed by Freepik</a> -->
+                            <img src="/src/assets/textures/progress-image.jpg" alt="">
+                        </p>
+                    </div>
+                <button class="modal-close is-large" aria-label="close"></button>
+            </div>          
+        </div>
+        <div class="is-invisible render-container"></div>    
+        <div class="is-invisible level data-container">
+            <div class="level-left"></div>
+            <div class="level-right">
+                <div class="level-item">
+                   <div class="card">
+                        <div class="card-content"> 
+                            <div class="content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="src/libs/threejs/three.js"></script>
     <script src="src/assets/js/util/planetUtil.js"></script>
     <script src="src/libs/threejs/OrbitControls.js"></script>
@@ -14,41 +77,8 @@
     <script src="src/assets/js/util/util.js"></script>
     <script src="src/assets/js/json/data.js"></script>
     <script src="src/assets/js/tweens.js"></script>
-    <script src="src/assets/js/main.js"></script>
-    <link rel="shortcut icon" href="/src/assets/textures/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.css"></link>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112981926-1"></script>
-    <script>
-         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-112981926-1');
-    </script>
+    <script src="src/assets/js/main.js"></script>
 
-
- </head>
- <body>
-
-     <div class="app">
-        <div class="render-container"> 
-            
-        </div>
-        <!--
-        <div v-show="" class="level data-container">
-            <div class="level-left"></div>
-            <div class="level-right">
-                <div class="level-item">
-                    <card></card>
-                </div>
-            </div>
-        </div>
-        -->
-    </div>
-<!--
-    <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
-    <script src="assets/js/components/cards.js"></script>  
--->
  </body>
  </html>
