@@ -15,18 +15,49 @@ TWEENS.runners.createTweensByGeoPosition = function(dataList, cameraContainer){
         var targetPosition = UTIL.Functions.convertLatLonToVec3(element.latitude,element.longitude, radiusToTarget, radiusSpaceView);
 
         var goToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, TWEENS.runners.transitionSpaceSpeed ).easing(TWEEN.Easing.Quadratic.Out)
-        .onUpdate(function(){cameraContainer.camera.updateProjectionMatrix()});
+        .onUpdate(function(){
+            cameraContainer.camera.updateProjectionMatrix()
+        });
 
         var gotToTargetView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.targetView, TWEENS.runners.transitionToTargetSpeed ).easing(TWEEN.Easing.Quadratic.Out)
-        .onUpdate(function(){cameraContainer.camera.updateProjectionMatrix()})
+        .onUpdate(function(){
+            cameraContainer.camera.updateProjectionMatrix();
+        })
+        .onStart(function(){
+            if(element.img === undefined){
+                document.getElementById('target-img').src = "https://bulma.io/images/placeholders/96x96.png";
+            }else{
+                document.getElementById('target-img').src = element.img;
+            }
+        })
+        .onComplete(function(){
+
+            document.getElementById('target-title').innerHTML = element.nameBranch;
+            document.getElementById('target-description').innerHTML = element.description;
+            document.getElementById('target-qt').innerHTML = element.qt;
+            document.getElementById('target-extra').innerHTML = element.extra;
+
+            var parent = document.getElementById("app");
+            parent.querySelectorAll('.data-container')[0].classList.remove("fade-out");
+            parent.querySelectorAll('.data-container')[0].classList.add("fade-in");
+        });
 
         var backToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, TWEENS.runners.transitionToTargetSpeed ).easing(TWEEN.Easing.Quadratic.Out)
-        .onUpdate(function(){cameraContainer.camera.updateProjectionMatrix()})
+        .onUpdate(function(){
+            cameraContainer.camera.updateProjectionMatrix();
+        })
+        .onStart(function(){
+            var parent = document.getElementById("app");
+            parent.querySelectorAll('.data-container')[0].classList.remove("fade-in");
+            parent.querySelectorAll('.data-container')[0].classList.add("fade-out");
+        })
         .onComplete(function(){
             TWEENS.runners.processId += 1;
-            if(TWEENS.runners.processId > dataList.length){
-                TWEENS.runners.processId = 1;
+            
+            if(TWEENS.runners.processId >= dataList.length){
+                TWEENS.runners.processId = 0;
             }
+            console.log("ProcessId-> " + TWEENS.runners.processId);
             TWEENS.runners.runnersContainer[TWEENS.runners.processId].start();
         });
         
@@ -34,7 +65,7 @@ TWEENS.runners.createTweensByGeoPosition = function(dataList, cameraContainer){
 
         TWEENS.runners.runnersContainer.push(goToSpaceView);
     });  
-}
+} 
 
 TWEENS.runners.createTweensObjectByGeoPosition = function(dataList, objectToMove){
 

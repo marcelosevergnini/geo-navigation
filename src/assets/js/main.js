@@ -2,7 +2,7 @@ var demo = (function() {
 
     "use strict";
 
-    var container, scene = new THREE.Scene(), controls, renderer, stats, renderer, markers = [];
+    var scene = new THREE.Scene(), controls, renderer, stats, renderer, markers = [];
     var cameraContainer = {}
     var CANVAS_WIDTH = window.innerWidth,CANVAS_HEIGHT = window.innerHeight;
     var objectGroup = new THREE.Object3D();
@@ -52,7 +52,6 @@ var demo = (function() {
         renderer = new THREE.WebGLRenderer({ antialias: false });
         renderer.setClearColor(0xf0f0f0);
         renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT, false);
-        container.appendChild(renderer.domElement);
     },
     setControls = function () {
         controls = new THREE.OrbitControls(cameraContainer.camera);
@@ -89,11 +88,9 @@ var demo = (function() {
       
     },
     init = function () {
-        createLoadManager();
-        container = document.createElement("div");
-        container.setAttribute("id", "container_webgl");
-        document.getElementsByClassName("render-container")[0].appendChild(container);
+        createLoadManager();    
         loadRender();
+        document.getElementsByClassName("render-container")[0].appendChild(renderer.domElement);
         lights();
         createGeometry();    
         setCamera();
@@ -105,7 +102,7 @@ var demo = (function() {
 
     document.getElementById("start-container").addEventListener("click", function(event) {
         var parent = document.getElementById("app");
-        parent.querySelectorAll('.is-invisible')[0].removeAttribute("class", "is-invisible")
+        parent.querySelectorAll('.is-invisible')[0].classList.remove("is-invisible");
         
         parent.removeChild(parent.querySelectorAll('.progress-countainer')[0]);
         TWEENS.runners.runnersContainer[TWEENS.runners.processId].delay(500).start();

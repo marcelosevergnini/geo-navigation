@@ -18,7 +18,7 @@
  </head>
  <body>
 
-     <div id="app">
+    <div id="app">
         <div class="progress-countainer">
             <div class="is-active modal">
                 <div class="modal-background"></div>
@@ -38,10 +38,7 @@
                                         Click to Start
                                 </button>
                             </p>
-                            
                         </div>
-                        
-
                         <p class="image is-4by3">
                             <!-- Image by <a href='https://www.freepik.com/free-vector/world-map-background-in-abstract-style_770809.htm'>Designed by Freepik</a> -->
                             <img src="src/assets/textures/progress-image.jpg" alt="">
@@ -50,19 +47,35 @@
                 <button class="modal-close is-large" aria-label="close"></button>
             </div>          
         </div>
-        <div class="is-invisible render-container"></div>    
-        <div class="is-invisible level data-container">
-            <div class="level-left"></div>
-            <div class="level-right">
-                <div class="level-item">
-                   <div class="card">
-                        <div class="card-content"> 
-                            <div class="content">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+        <div class="is-invisible render-container"></div>   
+         
+        <div class="fade-out data-container">
+
+            <div class="columns">
+                <div class="column is-8"></div>
+                <div class="column is-3">
+                    <div class="data-content">
+                        <div class="card">
+                            <div class="card-image">
+                                <figure class="image is-2by2">
+                                    <img id="target-img" src="" alt="Placeholder image">
+                                </figure>
+                            </div>
+                            <div class="card-content"> 
+                                <div class="media">
+                                    <div class="media-content">
+                                        <p id="target-title" class="title is-4"></p>
+                                        <p id="target-description" class="subtitle is-6"></p>
+                                        <p id="target-qt" class="subtitle is-6"></p>
+                                        <p id="target-extra" class="subtitle is-6"></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="column is-1"></div>
             </div>
         </div>
     </div>
