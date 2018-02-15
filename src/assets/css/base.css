@@ -8,6 +8,18 @@
 
 .data-container{
   z-index: 2; position: relative;
+  opacity: 0.5;
+}
+
+.data-content{
+  padding: 0 10px 0 10px;
+  margin-top:90px;
+}
+
+@media (min-width: 0) and (max-width: 750px) {
+	.data-content {
+    margin-bottom:0;
+	}
 }
 
 #app{
@@ -17,4 +29,16 @@
 
 .loading-label{ 
   color: #FFFFFF
+}
+
+.fade-in{
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 1s linear;
+}
+
+.fade-out{
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 1s linear;
 }
