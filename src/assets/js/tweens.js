@@ -65,7 +65,7 @@ TWEENS.runners.createTweensByGeoPosition = function(dataList, cameraContainer){
 
         TWEENS.runners.runnersContainer.push(goToSpaceView);
     });  
-}
+} 
 
 TWEENS.runners.createTweensObjectByGeoPosition = function(dataList, objectToMove){
 
