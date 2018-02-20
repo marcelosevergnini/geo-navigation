@@ -1,0 +1,25 @@
+{
+  "name": "geo-location",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcelosevergnini/geo-navigation.git"
+  },
+  "author": "Marcelo Severgnini",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marcelosevergnini/geo-navigation/issues"
+  },
+  "homepage": "https://github.com/marcelosevergnini/geo-navigation#readme",
+  "dependencies": {
+    "three": "^0.90.0",
+    "tween.js": "^16.6.0",
+    "webpack": "^3.11.0"
+  }
+}
