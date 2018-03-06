@@ -6,7 +6,7 @@ const resolvePath = (pathToResolve = "") =>
 module.exports = {
   entry: resolvePath("src/js/app.js"),
   output: {
-    path: resolvePath("dist/bundle"),
+    path: resolvePath("dist/bundle/"),
     filename: "geonavigation.bundle.js"
   },
   devtool: "source-map",
@@ -30,7 +30,9 @@ module.exports = {
             loader: "file-loader",
             options: {
               limit: 8000, // Convert images < 8kb to base64 strings
-              name: "images/[name].[ext]"
+              name: "[name].[ext]",
+              outputPath: "/images/",
+              publicPath: "dist/bundle/images/"
             }
           }
         ]
