@@ -4,6 +4,7 @@ import { cssBase } from "../style/base.css";
 import { cssBulma } from "../style/bulmaswatch.min.css";
 import { cssBulmaTheme } from "../style/bulma.theme.css";
 import { image } from "../assets/textures/progress-image.jpg";
+import { favicon } from "../assets/textures/favicon.png";
 
 const OrbitControls = require("three-orbitcontrols");
 var TWEEN = require("@tweenjs/tween.js");
