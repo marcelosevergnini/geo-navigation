@@ -47609,7 +47609,7 @@ function getData() {
 /* WEBPACK VAR INJECTION */(function(__dirname) {
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.createEarth = createEarth;
 exports.createEarthCloud = createEarthCloud;
@@ -47638,96 +47638,92 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var path = __webpack_require__(13);
 
 var resolvePath = function resolvePath() {
-    var pathToResolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-    return path.resolve(__dirname, pathToResolve);
+  var pathToResolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  return path.resolve(__dirname, pathToResolve);
 };
 
 function createEarth(manager) {
+  var mapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
+  var bumpMapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
+  var specularMapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
 
-    var mapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
-    var bumpMapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
-    var specularMapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
-
-    var geometry = new _three.SphereGeometry(50, 32, 32);
-    var material = new _three.MeshPhongMaterial({
-        map: mapLoader,
-        bumpMap: bumpMapLoader,
-        bumpScale: 0.05,
-        shininess: 100,
-        specularMap: specularMapLoader,
-        specular: new _three.Color('grey')
-    });
-    var mesh = new _three.Mesh(geometry, material);
-    return mesh;
+  var geometry = new _three.SphereGeometry(50, 32, 32);
+  var material = new _three.MeshPhongMaterial({
+    map: mapLoader,
+    bumpMap: bumpMapLoader,
+    bumpScale: 0.05,
+    shininess: 100,
+    specularMap: specularMapLoader,
+    specular: new _three.Color("grey")
+  });
+  var mesh = new _three.Mesh(geometry, material);
+  return mesh;
 }
 
 function createEarthCloud(manager) {
+  // create destination canvas
+  var canvasResult = document.createElement("canvas");
+  canvasResult.width = 1024;
+  canvasResult.height = 512;
+  var contextResult = canvasResult.getContext("2d");
 
-    // create destination canvas
-    var canvasResult = document.createElement('canvas');
-    canvasResult.width = 1024;
-    canvasResult.height = 512;
-    var contextResult = canvasResult.getContext('2d');
+  // load earthcloudmap
+  var imageMap = new Image();
+  imageMap.addEventListener("load", function () {
+    // create dataMap ImageData for earthcloudmap
+    var canvasMap = document.createElement("canvas");
+    canvasMap.width = imageMap.width;
+    canvasMap.height = imageMap.height;
+    var contextMap = canvasMap.getContext("2d");
+    contextMap.drawImage(imageMap, 0, 0);
+    var dataMap = contextMap.getImageData(0, 0, canvasMap.width, canvasMap.height);
 
-    // load earthcloudmap
-    var imageMap = new Image();
-    imageMap.addEventListener("load", function () {
-
-        // create dataMap ImageData for earthcloudmap
-        var canvasMap = document.createElement('canvas');
-        canvasMap.width = imageMap.width;
-        canvasMap.height = imageMap.height;
-        var contextMap = canvasMap.getContext('2d');
-        contextMap.drawImage(imageMap, 0, 0);
-        var dataMap = contextMap.getImageData(0, 0, canvasMap.width, canvasMap.height);
-
-        // load earthcloudmaptrans
-        var imageTrans = new Image();
-        imageTrans.addEventListener("load", function () {
-            // create dataTrans ImageData for earthcloudmaptrans
-            var canvasTrans = document.createElement('canvas');
-            canvasTrans.width = imageTrans.width;
-            canvasTrans.height = imageTrans.height;
-            var contextTrans = canvasTrans.getContext('2d');
-            contextTrans.drawImage(imageTrans, 0, 0);
-            var dataTrans = contextTrans.getImageData(0, 0, canvasTrans.width, canvasTrans.height);
-            // merge dataMap + dataTrans into dataResult
-            var dataResult = contextMap.createImageData(canvasMap.width, canvasMap.height);
-            for (var y = 0, offset = 0; y < imageMap.height; y++) {
-                for (var x = 0; x < imageMap.width; x++, offset += 4) {
-                    dataResult.data[offset + 0] = dataMap.data[offset + 0];
-                    dataResult.data[offset + 1] = dataMap.data[offset + 1];
-                    dataResult.data[offset + 2] = dataMap.data[offset + 2];
-                    dataResult.data[offset + 3] = 255 - dataTrans.data[offset + 0];
-                }
-            }
-            // update texture with result
-            contextResult.putImageData(dataResult, 0, 0);
-            material.map.needsUpdate = true;
-        });
-        imageTrans.src = resolvePath(_earthcloudmaptrans2.default);
-    }, false);
-
-    imageMap.src = resolvePath(_earthcloudmap2.default);
-
-    var geometry = new _three.SphereGeometry(50.5, 32, 32);
-    var material = new _three.MeshPhongMaterial({
-        map: new _three.Texture(canvasResult),
-        side: _three.DoubleSide,
-        transparent: true,
-        opacity: 0.8
+    // load earthcloudmaptrans
+    var imageTrans = new Image();
+    imageTrans.addEventListener("load", function () {
+      // create dataTrans ImageData for earthcloudmaptrans
+      var canvasTrans = document.createElement("canvas");
+      canvasTrans.width = imageTrans.width;
+      canvasTrans.height = imageTrans.height;
+      var contextTrans = canvasTrans.getContext("2d");
+      contextTrans.drawImage(imageTrans, 0, 0);
+      var dataTrans = contextTrans.getImageData(0, 0, canvasTrans.width, canvasTrans.height);
+      // merge dataMap + dataTrans into dataResult
+      var dataResult = contextMap.createImageData(canvasMap.width, canvasMap.height);
+      for (var y = 0, offset = 0; y < imageMap.height; y++) {
+        for (var x = 0; x < imageMap.width; x++, offset += 4) {
+          dataResult.data[offset + 0] = dataMap.data[offset + 0];
+          dataResult.data[offset + 1] = dataMap.data[offset + 1];
+          dataResult.data[offset + 2] = dataMap.data[offset + 2];
+          dataResult.data[offset + 3] = 255 - dataTrans.data[offset + 0];
+        }
+      }
+      // update texture with result
+      contextResult.putImageData(dataResult, 0, 0);
+      material.map.needsUpdate = true;
     });
-    var mesh = new _three.Mesh(geometry, material);
-    return mesh;
+    imageTrans.src = _earthcloudmaptrans2.default;
+  }, false);
+
+  imageMap.src = _earthcloudmap2.default;
+
+  var geometry = new _three.SphereGeometry(50.5, 32, 32);
+  var material = new _three.MeshPhongMaterial({
+    map: new _three.Texture(canvasResult),
+    side: _three.DoubleSide,
+    transparent: true,
+    opacity: 0.8
+  });
+  var mesh = new _three.Mesh(geometry, material);
+  return mesh;
 }
 
 function createSkyBox(manager) {
-
-    var texture = new _three.TextureLoader(manager).load(_galaxy_starfield2.default);
-    var material = new _three.MeshBasicMaterial({ map: texture, side: _three.BackSide });
-    var geometry = new _three.SphereGeometry(1000, 32, 32);
-    var mesh = new _three.Mesh(geometry, material);
-    return mesh;
+  var texture = new _three.TextureLoader(manager).load(_galaxy_starfield2.default);
+  var material = new _three.MeshBasicMaterial({ map: texture, side: _three.BackSide });
+  var geometry = new _three.SphereGeometry(1000, 32, 32);
+  var mesh = new _three.Mesh(geometry, material);
+  return mesh;
 }
 /* WEBPACK VAR INJECTION */}.call(exports, "/"))
 

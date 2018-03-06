@@ -1,7 +1,7 @@
 {
-  "name": "geo-location",
+  "name": "geo-navigation",
   "version": "1.0.0",
-  "description": "",
+  "description": "Geo navigation using ThreeJs and TweenJS",
   "main": "webpack.config.js",
   "scripts": {
     "start": "webpack-dev-server --content-base dist --inline",
