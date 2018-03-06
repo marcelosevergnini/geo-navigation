@@ -1,25 +1,39 @@
-import {TWEEN} from 'tween.js'
-import {UTIL} from 'util.js'
+var TWEEN = require('@tweenjs/tween.js');
+var util = require('./util');
 
+let runner	= {
+    runnersContainer : [],
+    processId : 0,
+    transitionSpaceSpeed : 4000,
+    transitionToTargetSpeed : 1000
+}
 
-export function createRunners(dataList, cameraContainer) {
+export function tweenContainer(){
+    return runner;
+}
+
+export function createRunners(dataList, cameraContainer, controls) {
 	
 	let radiusToTarget = 1.3, radiusSpaceView = 3.5;
 
     dataList.forEach(function(element) {
-        
-        var targetPosition = UTIL.Functions.convertLatLonToVec3(element.latitude,element.longitude, radiusToTarget, radiusSpaceView);
+  
+        let targetPosition = util.convertLatLonToVec3(element.latitude,element.longitude, radiusToTarget, radiusSpaceView);
 
-        var goToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, TWEENS.runners.transitionSpaceSpeed ).easing(TWEEN.Easing.Quadratic.Out)
+        let goToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, runner.transitionSpaceSpeed ).easing(TWEEN.Easing.Quadratic.Out)
+        .onStart(function(){enableControl(controls)})
         .onUpdate(function(){
             cameraContainer.camera.updateProjectionMatrix()
-        });
+        })
+        .onComplete(function(){disableControl(controls)});
 
-        var gotToTargetView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.targetView, TWEENS.runners.transitionToTargetSpeed ).easing(TWEEN.Easing.Quadratic.Out)
+
+        let gotToTargetView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.targetView, runner.transitionToTargetSpeed ).easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(function(){
             cameraContainer.camera.updateProjectionMatrix();
         })
         .onStart(function(){
+            enableControl(controls);
             if(element.img === undefined){
                 document.getElementById('target-img').src = "https://bulma.io/images/placeholders/96x96.png";
             }else{
@@ -27,39 +41,50 @@ export function createRunners(dataList, cameraContainer) {
             }
         })
         .onComplete(function(){
-
+            disableControl(controls);
             document.getElementById('target-title').innerHTML = element.nameBranch;
             document.getElementById('target-description').innerHTML = element.description;
             document.getElementById('target-qt').innerHTML = element.qt;
             document.getElementById('target-extra').innerHTML = element.extra;
 
-            var parent = document.getElementById("app");
+            let parent = document.getElementById("app");
             parent.querySelectorAll('.data-container')[0].classList.remove("fade-out");
             parent.querySelectorAll('.data-container')[0].classList.add("fade-in");
+            
         });
 
-        var backToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, TWEENS.runners.transitionToTargetSpeed ).easing(TWEEN.Easing.Quadratic.Out)
+        let backToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, runner.transitionToTargetSpeed ).easing(TWEEN.Easing.Quadratic.Out)
+        .onStart(function(){
+            enableControl(controls);
+            let parent = document.getElementById("app");
+            parent.querySelectorAll('.data-container')[0].classList.remove("fade-in");
+            parent.querySelectorAll('.data-container')[0].classList.add("fade-out");
+            
+        })
         .onUpdate(function(){
             cameraContainer.camera.updateProjectionMatrix();
         })
-        .onStart(function(){
-            var parent = document.getElementById("app");
-            parent.querySelectorAll('.data-container')[0].classList.remove("fade-in");
-            parent.querySelectorAll('.data-container')[0].classList.add("fade-out");
-        })
         .onComplete(function(){
-            TWEENS.runners.processId += 1;
+            disableControl(controls);
+            runner.processId += 1;
             
-            if(TWEENS.runners.processId >= dataList.length){
-                TWEENS.runners.processId = 0;
+            if(runner.processId >= dataList.length){
+                runner.processId = 0;
             }
-            console.log("ProcessId-> " + TWEENS.runners.processId);
-            TWEENS.runners.runnersContainer[TWEENS.runners.processId].start();
+            runner.runnersContainer[runner.processId].start();
         });
         
-        goToSpaceView.chain(gotToTargetView.chain(backToSpaceView.delay(4000)));
+        goToSpaceView.chain(gotToTargetView.chain(backToSpaceView.delay(10000)));
 
-        TWEENS.runners.runnersContainer.push(goToSpaceView);
+        runner.runnersContainer.push(goToSpaceView);
+        
     }); 
+
+    function enableControl(controls){
+        controls.enabled = true;
+    }
+    function disableControl(controls){
+        controls.enabled = false;
+    }
 
 }
