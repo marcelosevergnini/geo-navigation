@@ -4,11 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>Geo Navigation</title>
-    <link rel="shortcut icon" href="src/assets/textures/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.css"></link>
-    <link rel="stylesheet" type="text/css" href="src/assets/css/base.css"></link>
+    <link href="images/favicon.png" rel="shortcut icon">
+    <!-- link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.css"></link -->
+    <link type="text/css" href="bundle/style/bulmaswatch.min.css" rel="stylesheet">
+    <link type="text/css" href="bundle/style/bulma.theme.css" rel="stylesheet">
+    <link type="text/css" href="bundle/style/base.css" rel="stylesheet">
    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112981926-1"></script>
+    <script src="https://www.googletagmanager.com/gtag/js?id=UA-112981926-1" async></script>
     <script>
          window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -23,13 +25,9 @@
             <div class="is-active modal">
                 <div class="modal-background"></div>
                     <div class="modal-content">
-                        <div class="columns">
-                            <div class="column">
-                                <span class="loading-label">Loading...</span>
-                                <progress id="progress-bar" class="progress is-primary" value="" max="100"></progress>
-                            </div>
-                        </div>
-                        <div id="start-container" class="is-invisible">
+                            <span class="loading-label">Loading...</span>
+                            <progress class="progress is-primary" id="progress-bar" value max="100"></progress>
+                        <div class="is-invisible" id="start-container">
                             <p class="control">
                                 <button class="button is-primary is-medium">
                                         <span class="icon is-medium">
@@ -41,10 +39,9 @@
                         </div>
                         <p class="image is-4by3">
                             <!-- Image by <a href='https://www.freepik.com/free-vector/world-map-background-in-abstract-style_770809.htm'>Designed by Freepik</a> -->
-                            <img src="src/assets/textures/progress-image.jpg" alt="">
+                            <img class="load-image" src="images/progress-image.jpg" alt>
                         </p>
                     </div>
-                <button class="modal-close is-large" aria-label="close"></button>
             </div>          
         </div>
 
@@ -59,16 +56,16 @@
                         <div class="card">
                             <div class="card-image">
                                 <figure class="image is-2by2">
-                                    <img id="target-img" src="" alt="Placeholder image">
+                                    <img id="target-img" src alt="Placeholder image">
                                 </figure>
                             </div>
                             <div class="card-content"> 
                                 <div class="media">
                                     <div class="media-content">
-                                        <p id="target-title" class="title is-4"></p>
-                                        <p id="target-description" class="subtitle is-6"></p>
-                                        <p id="target-qt" class="subtitle is-6"></p>
-                                        <p id="target-extra" class="subtitle is-6"></p>
+                                        <p class="title is-4" id="target-title"></p>
+                                        <p class="subtitle is-6" id="target-description"></p>
+                                        <p class="subtitle is-6" id="target-qt"></p>
+                                        <p class="subtitle is-6" id="target-extra"></p>
                                     </div>
                                 </div>
                             </div>
@@ -80,18 +77,7 @@
         </div>
     </div>
 
-
-    <script src="src/libs/threejs/three.js"></script>
-    <script src="src/assets/js/util/planetUtil.js"></script>
-    <script src="src/libs/threejs/OrbitControls.js"></script>
-    <script src="src/libs/threejs/GeometryUtils.js"></script>
-    <script src="src/libs/dat.gui.min.js"></script>
-    <script src="src/libs/threejs/OBJLoader.js"></script>
-    <script src="src/assets/js/util/util.js"></script>
-    <script src="src/assets/js/json/data.js"></script>
-    <script src="src/assets/js/tweens.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
-    <script src="src/assets/js/main.js"></script>
+    <script src="bundle/geonavigation.bundle.js"></script>
 
  </body>
  </html>
