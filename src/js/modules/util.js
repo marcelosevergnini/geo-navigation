@@ -1,20 +1,10 @@
-import {
-  Vector3,
-  MeshPhongMaterial,
-  CylinderGeometry,
-  Object3D,
-  Geometry,
-  ObjectLoader,
-  BufferGeometry,
-  SphereGeometry,
-  Mesh
-} from "three";
+import { Vector3, MeshPhongMaterial, CylinderGeometry, Object3D, Geometry, ObjectLoader, BufferGeometry, SphereGeometry, Mesh } from "three";
 
 export function convertLatLonToVec3(lat, lon, radiusToTarget, radiusSpaceView) {
-  var phi = (90 - lat) * (Math.PI / 180);
-  var theta = (lon + 180) * (Math.PI / 180);
+  let phi = (90 - lat) * (Math.PI / 180);
+  let theta = (lon + 180) * (Math.PI / 180);
 
-  var objectTarget = {};
+  let objectTarget = {};
 
   objectTarget.targetView = new Vector3(
     -(radiusToTarget * Math.sin(phi) * Math.cos(theta)),
@@ -32,7 +22,7 @@ export function convertLatLonToVec3(lat, lon, radiusToTarget, radiusSpaceView) {
 }
 
 export function createMarker() {
-  var pointer = new Mesh(
+  let pointer = new Mesh(
     new CylinderGeometry(0.1, 0, 5),
     new MeshPhongMaterial({ color: 0xff5c01 })
   );
@@ -42,16 +32,16 @@ export function createMarker() {
     new Vector3(1, 0, 0)
   );
 
-  var marker = new Object3D();
+  let marker = new Object3D();
   marker.add(pointer);
 
   return marker;
 }
 
 export function createPin(manager, scaleX, scaleY, scaleZ, pin) {
-  var marker = new Object3D();
+  let marker = new Object3D();
 
-  var loader = new ObjectLoader(manager);
+  let loader = new ObjectLoader(manager);
   loader.load(pin, function(object) {
     object.traverse(function(child) {
       if (child instanceof Mesh) {
@@ -60,7 +50,7 @@ export function createPin(manager, scaleX, scaleY, scaleZ, pin) {
           specular: 0x050505,
           shininess: 100
         });
-        var geometry = new Geometry().fromBufferGeometry(child.geometry);
+        let geometry = new Geometry().fromBufferGeometry(child.geometry);
         geometry.computeFaceNormals();
         geometry.mergeVertices();
         geometry.computeVertexNormals();
@@ -81,21 +71,56 @@ export function createPin(manager, scaleX, scaleY, scaleZ, pin) {
   return marker;
 }
 
-export function createSimpleSphere(
-  rad,
-  widthSegments,
-  heightSegments,
-  posX,
-  posY,
-  posZ
-) {
-  var geometry = new SphereGeometry(rad, widthSegments, heightSegments);
-  var material = new MeshPhongMaterial({
-    bumpScale: 0.05
-  });
-  var object = new Object3D();
+export function createSimpleSphere( rad, widthSegments, heightSegments, posX, posY, posZ) {
+  let geometry = new SphereGeometry(rad, widthSegments, heightSegments);
+  let material = new MeshPhongMaterial({ bumpScale: 0.05 });
+  let object = new Object3D();
   object = new Mesh(geometry, material);
   object.position.set(posX, posY, posZ);
 
   return object;
 }
+
+export function Detector() {
+    //from  -->> https://github.com/mrdoob/three.js/blob/master/examples/js/Detector.js
+    var Detector = { canvas: !!window.CanvasRenderingContext2D, webgl: (function() {
+      try {
+        var canvas = document.createElement("canvas");
+        return !!(window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")));
+      } catch (e) {
+        return false;
+      }
+    })(), workers: !!window.Worker, fileapi: window.File && window.FileReader && window.FileList && window.Blob,
+    getWebGLErrorMessage: function() {
+      var element = document.createElement("div");
+      element.id = "webgl-error-message";
+      element.style.fontFamily = "monospace";
+      element.style.fontSize = "13px";
+      element.style.fontWeight = "normal";
+      element.style.textAlign = "center";
+      element.style.background = "#fff";
+      element.style.color = "#000";
+      element.style.padding = "1.5em";
+      element.style.width = "400px";
+      element.style.margin = "5em auto 0";
+
+      if (!this.webgl) {
+        element.innerHTML = window.WebGLRenderingContext ? ['Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br />', 'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.'].join("\n") : ['Your browser does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br/>', 'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.'].join("\n");
+      }
+
+      return element;
+    },
+    addGetWebGLMessage: function(parameters) {
+      var parent, id, element;
+
+      parameters = parameters || {};
+
+      parent = parameters.parent !== undefined ? parameters.parent : document.body;
+      id = parameters.id !== undefined ? parameters.id : "oldie";
+
+      element = Detector.getWebGLErrorMessage();
+      element.id = id;
+
+      parent.appendChild(element);
+    } };
+};

@@ -5,6 +5,7 @@ export { createSimpleSphere } from "./util";
 export { createRunners } from "./tween";
 export { tweenContainer } from "./tween";
 export { getData } from "./data";
+export { Detector } from "./util";
 export { Object3D } from "three";
 export { Scene } from "three";
 export { LoadingManager } from "three";
