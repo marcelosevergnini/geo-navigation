@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -46019,6 +46019,7 @@ exports.convertLatLonToVec3 = convertLatLonToVec3;
 exports.createMarker = createMarker;
 exports.createPin = createPin;
 exports.createSimpleSphere = createSimpleSphere;
+exports.Detector = Detector;
 
 var _three = __webpack_require__(0);
 
@@ -46078,15 +46079,57 @@ function createPin(manager, scaleX, scaleY, scaleZ, pin) {
 
 function createSimpleSphere(rad, widthSegments, heightSegments, posX, posY, posZ) {
   var geometry = new _three.SphereGeometry(rad, widthSegments, heightSegments);
-  var material = new _three.MeshPhongMaterial({
-    bumpScale: 0.05
-  });
+  var material = new _three.MeshPhongMaterial({ bumpScale: 0.05 });
   var object = new _three.Object3D();
   object = new _three.Mesh(geometry, material);
   object.position.set(posX, posY, posZ);
 
   return object;
 }
+
+function Detector() {
+  //from  -->> https://github.com/mrdoob/three.js/blob/master/examples/js/Detector.js
+  var Detector = { canvas: !!window.CanvasRenderingContext2D, webgl: function () {
+      try {
+        var canvas = document.createElement("canvas");
+        return !!(window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")));
+      } catch (e) {
+        return false;
+      }
+    }(), workers: !!window.Worker, fileapi: window.File && window.FileReader && window.FileList && window.Blob,
+    getWebGLErrorMessage: function getWebGLErrorMessage() {
+      var element = document.createElement("div");
+      element.id = "webgl-error-message";
+      element.style.fontFamily = "monospace";
+      element.style.fontSize = "13px";
+      element.style.fontWeight = "normal";
+      element.style.textAlign = "center";
+      element.style.background = "#fff";
+      element.style.color = "#000";
+      element.style.padding = "1.5em";
+      element.style.width = "400px";
+      element.style.margin = "5em auto 0";
+
+      if (!this.webgl) {
+        element.innerHTML = window.WebGLRenderingContext ? ['Your graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br />', 'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.'].join("\n") : ['Your browser does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>.<br/>', 'Find out how to get it <a href="http://get.webgl.org/" style="color:#000">here</a>.'].join("\n");
+      }
+
+      return element;
+    },
+    addGetWebGLMessage: function addGetWebGLMessage(parameters) {
+      var parent, id, element;
+
+      parameters = parameters || {};
+
+      parent = parameters.parent !== undefined ? parameters.parent : document.body;
+      id = parameters.id !== undefined ? parameters.id : "oldie";
+
+      element = Detector.getWebGLErrorMessage();
+      element.id = id;
+
+      parent.appendChild(element);
+    } };
+};
 
 /***/ }),
 /* 2 */
@@ -47011,10 +47054,407 @@ TWEEN.Interpolation = {
 
 })(this);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.geoNavigation = geoNavigation;
+
+var _loader = __webpack_require__(4);
+
+var base = _interopRequireWildcard(_loader);
+
+var _Pin = __webpack_require__(13);
+
+var _base = __webpack_require__(14);
+
+var _bulmaswatchMin = __webpack_require__(15);
+
+var _bulmaTheme = __webpack_require__(16);
+
+var _progressImage = __webpack_require__(17);
+
+var _favicon = __webpack_require__(18);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var OrbitControls = __webpack_require__(19);
+var TWEEN = __webpack_require__(2);
+
+geoNavigation().init();
+
+function geoNavigation() {
+  var scene = void 0;
+  var controls = void 0;
+  var renderer = void 0;
+  var cameraContainer = {};
+  var CANVAS_WIDTH = window.innerWidth;
+  var CANVAS_HEIGHT = window.innerHeight;
+  var objectGroup = new base.Object3D();
+  var earthObject = {};
+  var loadManager = void 0;
+  var progress = {};
+  var renderContainer = void 0;
+
+  var createLoadManager = function createLoadManager() {
+
+    var onLoad = function onLoad() {
+      document.getElementById("start-container").setAttribute("class", "field is-grouped is-grouped-centered");
+    };
+
+    loadManager = new base.LoadingManager(onLoad);
+
+    loadManager.onProgress = function (url, itemsLoaded, itemsTotal) {
+      document.getElementById("progress-bar").setAttribute("value", itemsLoaded / itemsTotal * 100);
+      document.getElementById("progress-bar").innerHTML = itemsLoaded / itemsTotal * 100 + "%";
+    };
+
+    loadManager.onError = function (url) {
+      console.log("Error loading texture: " + url);
+    };
+  },
+      createGeometry = function createGeometry() {
+    earthObject.earthMesh = base.createEarth(loadManager);
+    earthObject.cloudsMesh = base.createEarthCloud(loadManager);
+    earthObject.earth = new base.Object3D();
+    earthObject.earth.add(earthObject.earthMesh);
+    earthObject.earth.add(earthObject.cloudsMesh);
+    objectGroup.add(earthObject.earth);
+    objectGroup.add(base.createSkyBox(loadManager));
+    scene.add(objectGroup);
+  },
+      setMarker = function setMarker(listBranchList) {
+    var rad = Math.PI / 180;
+
+    listBranchList.forEach(function (element) {
+      //let marker = base.createPin(loadManager, 0.002, 0.002, 0.002, pin);
+      var marker = base.createMarker();
+      marker.name = element.nameBranch.replace(/ /g, "-").toLowerCase();
+      marker.quaternion.setFromEuler(new base.Euler(0, element.longitude * rad, element.latitude * rad, "YZX"));
+      earthObject.earth.add(marker);
+    });
+  },
+      loadRender = function loadRender() {
+    renderer = new base.WebGLRenderer({ antialias: false });
+    renderer.setClearColor(0xf0f0f0);
+    renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT, false);
+    renderContainer = document.getElementsByClassName("render-container")[0];
+    renderContainer.appendChild(renderer.domElement);
+  },
+      setControls = function setControls() {
+    controls = new OrbitControls(cameraContainer.camera);
+    controls.minDistance = 65;
+    controls.maxDistance = 230;
+    controls.enabled = false;
+  },
+      lights = function lights() {
+    var lightA = new base.DirectionalLight(0xffffff);
+    lightA.position.set(0, 200, 0);
+    objectGroup.add(lightA);
+    var lightB = new base.DirectionalLight(0xffffff);
+    lightB.position.set(200, -200, 0);
+    objectGroup.add(lightB);
+  },
+      updateScene = function updateScene() {
+    if (controls.enabled) {
+      controls.update();
+    }
+    renderer.clear();
+    renderer.render(scene, cameraContainer.camera);
+  },
+      updateTasks = function updateTasks(time) {
+    TWEEN.update(time);
+  },
+      animate = function animate(time) {
+    requestAnimationFrame(animate);
+    updateTasks(time);
+    earthObject.cloudsMesh.rotation.y += 0.0001;
+    updateScene();
+  },
+      setCamera = function setCamera() {
+    var aspect = CANVAS_WIDTH / CANVAS_HEIGHT;
+    var fov = 45;
+    var near = 1;
+    var far = 100000;
+    cameraContainer.camera = new base.PerspectiveCamera(fov, aspect, near, far);
+    cameraContainer.camera.position.set(0, 0, 150);
+  },
+      init = function init() {
+
+    if (base.Detector) {
+      scene = new base.Scene();
+      createLoadManager();
+      loadRender();
+      lights();
+      createGeometry();
+      setCamera();
+      setControls();
+      base.createRunners(base.getData(), cameraContainer, controls);
+      setMarker(base.getData());
+      animate();
+    } else {
+      var warning = base.Detector.getWebGLErrorMessage();
+      renderContainer.appendChild(warning);
+    }
+  };
+
+  document.getElementById("start-container").addEventListener("click", function (event) {
+    var parent = document.getElementById("app");
+    parent.querySelectorAll(".is-invisible")[0].classList.remove("is-invisible");
+
+    parent.removeChild(parent.querySelectorAll(".progress-countainer")[0]);
+    base.tweenContainer().runnersContainer[base.tweenContainer().processId].delay(500).start();
+  });
+
+  return {
+    init: init
+  };
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _util = __webpack_require__(1);
+
+Object.defineProperty(exports, "convertLatLonToVec3", {
+  enumerable: true,
+  get: function get() {
+    return _util.convertLatLonToVec3;
+  }
+});
+Object.defineProperty(exports, "createMarker", {
+  enumerable: true,
+  get: function get() {
+    return _util.createMarker;
+  }
+});
+Object.defineProperty(exports, "createPin", {
+  enumerable: true,
+  get: function get() {
+    return _util.createPin;
+  }
+});
+Object.defineProperty(exports, "createSimpleSphere", {
+  enumerable: true,
+  get: function get() {
+    return _util.createSimpleSphere;
+  }
+});
+
+var _tween = __webpack_require__(5);
+
+Object.defineProperty(exports, "createRunners", {
+  enumerable: true,
+  get: function get() {
+    return _tween.createRunners;
+  }
+});
+Object.defineProperty(exports, "tweenContainer", {
+  enumerable: true,
+  get: function get() {
+    return _tween.tweenContainer;
+  }
+});
+
+var _data = __webpack_require__(7);
+
+Object.defineProperty(exports, "getData", {
+  enumerable: true,
+  get: function get() {
+    return _data.getData;
+  }
+});
+Object.defineProperty(exports, "Detector", {
+  enumerable: true,
+  get: function get() {
+    return _util.Detector;
+  }
+});
+
+var _three = __webpack_require__(0);
+
+Object.defineProperty(exports, "Object3D", {
+  enumerable: true,
+  get: function get() {
+    return _three.Object3D;
+  }
+});
+Object.defineProperty(exports, "Scene", {
+  enumerable: true,
+  get: function get() {
+    return _three.Scene;
+  }
+});
+Object.defineProperty(exports, "LoadingManager", {
+  enumerable: true,
+  get: function get() {
+    return _three.LoadingManager;
+  }
+});
+Object.defineProperty(exports, "WebGLRenderer", {
+  enumerable: true,
+  get: function get() {
+    return _three.WebGLRenderer;
+  }
+});
+Object.defineProperty(exports, "DirectionalLight", {
+  enumerable: true,
+  get: function get() {
+    return _three.DirectionalLight;
+  }
+});
+Object.defineProperty(exports, "PerspectiveCamera", {
+  enumerable: true,
+  get: function get() {
+    return _three.PerspectiveCamera;
+  }
+});
+Object.defineProperty(exports, "Vector3", {
+  enumerable: true,
+  get: function get() {
+    return _three.Vector3;
+  }
+});
+Object.defineProperty(exports, "Euler", {
+  enumerable: true,
+  get: function get() {
+    return _three.Euler;
+  }
+});
+
+var _planetMaker = __webpack_require__(8);
+
+Object.defineProperty(exports, "createEarth", {
+  enumerable: true,
+  get: function get() {
+    return _planetMaker.createEarth;
+  }
+});
+Object.defineProperty(exports, "createEarthCloud", {
+  enumerable: true,
+  get: function get() {
+    return _planetMaker.createEarthCloud;
+  }
+});
+Object.defineProperty(exports, "createSkyBox", {
+  enumerable: true,
+  get: function get() {
+    return _planetMaker.createSkyBox;
+  }
+});
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.tweenContainer = tweenContainer;
+exports.createRunners = createRunners;
+var TWEEN = __webpack_require__(2);
+var util = __webpack_require__(1);
+
+var runner = {
+    runnersContainer: [],
+    processId: 0,
+    transitionSpaceSpeed: 4000,
+    transitionToTargetSpeed: 1000
+};
+
+function tweenContainer() {
+    return runner;
+}
+
+function createRunners(dataList, cameraContainer, controls) {
+
+    var radiusToTarget = 1.3,
+        radiusSpaceView = 3.5;
+
+    dataList.forEach(function (element) {
+
+        var targetPosition = util.convertLatLonToVec3(element.latitude, element.longitude, radiusToTarget, radiusSpaceView);
+
+        var goToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, runner.transitionSpaceSpeed).easing(TWEEN.Easing.Quadratic.Out).onStart(function () {
+            enableControl(controls);
+        }).onUpdate(function () {
+            cameraContainer.camera.updateProjectionMatrix();
+        }).onComplete(function () {
+            disableControl(controls);
+        });
+
+        var gotToTargetView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.targetView, runner.transitionToTargetSpeed).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function () {
+            cameraContainer.camera.updateProjectionMatrix();
+        }).onStart(function () {
+            enableControl(controls);
+            if (element.img === undefined) {
+                document.getElementById('target-img').src = "https://bulma.io/images/placeholders/96x96.png";
+            } else {
+                document.getElementById('target-img').src = element.img;
+            }
+        }).onComplete(function () {
+            disableControl(controls);
+            document.getElementById('target-title').innerHTML = element.nameBranch;
+            document.getElementById('target-description').innerHTML = element.description;
+            document.getElementById('target-qt').innerHTML = element.qt;
+            document.getElementById('target-extra').innerHTML = element.extra;
+
+            var parent = document.getElementById("app");
+            parent.querySelectorAll('.data-container')[0].classList.remove("fade-out");
+            parent.querySelectorAll('.data-container')[0].classList.add("fade-in");
+        });
+
+        var backToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, runner.transitionToTargetSpeed).easing(TWEEN.Easing.Quadratic.Out).onStart(function () {
+            enableControl(controls);
+            var parent = document.getElementById("app");
+            parent.querySelectorAll('.data-container')[0].classList.remove("fade-in");
+            parent.querySelectorAll('.data-container')[0].classList.add("fade-out");
+        }).onUpdate(function () {
+            cameraContainer.camera.updateProjectionMatrix();
+        }).onComplete(function () {
+            disableControl(controls);
+            runner.processId += 1;
+
+            if (runner.processId >= dataList.length) {
+                runner.processId = 0;
+            }
+            runner.runnersContainer[runner.processId].start();
+        });
+
+        goToSpaceView.chain(gotToTargetView.chain(backToSpaceView.delay(10000)));
+
+        runner.runnersContainer.push(goToSpaceView);
+    });
+
+    function enableControl(controls) {
+        controls.enabled = true;
+    }
+    function disableControl(controls) {
+        controls.enabled = false;
+    }
+}
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -47204,389 +47644,6 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.geoNavigation = geoNavigation;
-
-var _loader = __webpack_require__(5);
-
-var base = _interopRequireWildcard(_loader);
-
-var _Pin = __webpack_require__(14);
-
-var _base = __webpack_require__(15);
-
-var _bulmaswatchMin = __webpack_require__(16);
-
-var _bulmaTheme = __webpack_require__(17);
-
-var _progressImage = __webpack_require__(18);
-
-var _favicon = __webpack_require__(19);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-var OrbitControls = __webpack_require__(20);
-var TWEEN = __webpack_require__(2);
-
-geoNavigation().init();
-
-function geoNavigation() {
-  var scene,
-      controls,
-      renderer,
-      stats,
-      renderer,
-      markers = [];
-  var cameraContainer = {};
-  var CANVAS_WIDTH = window.innerWidth,
-      CANVAS_HEIGHT = window.innerHeight;
-  var objectGroup = new base.Object3D();
-  var earthObject = {};
-  var loadManager;
-  var progress = {};
-
-  var createLoadManager = function createLoadManager() {
-    var onLoad = function onLoad() {
-      document.getElementById("start-container").setAttribute("class", "field is-grouped is-grouped-centered");
-    };
-    loadManager = new base.LoadingManager(onLoad);
-
-    loadManager.onProgress = function (url, itemsLoaded, itemsTotal) {
-      document.getElementById("progress-bar").setAttribute("value", itemsLoaded / itemsTotal * 100);
-      document.getElementById("progress-bar").innerHTML = itemsLoaded / itemsTotal * 100 + "%";
-    };
-    loadManager.onError = function (url) {
-      console.log("Error loading texture: " + url);
-    };
-  },
-      createGeometry = function createGeometry() {
-    earthObject.earthMesh = base.createEarth(loadManager);
-    earthObject.cloudsMesh = base.createEarthCloud(loadManager);
-    earthObject.earth = new base.Object3D();
-    earthObject.earth.add(earthObject.earthMesh);
-    earthObject.earth.add(earthObject.cloudsMesh);
-    objectGroup.add(earthObject.earth);
-    objectGroup.add(base.createSkyBox(loadManager));
-    scene.add(objectGroup);
-  },
-      setMarker = function setMarker(listBranchList) {
-    var rad = Math.PI / 180;
-
-    listBranchList.forEach(function (element) {
-      //var marker = base.createPin(loadManager, 0.002, 0.002, 0.002, pin);
-      var marker = base.createMarker();
-      marker.name = element.nameBranch.replace(/ /g, "-").toLowerCase();
-      marker.quaternion.setFromEuler(new base.Euler(0, element.longitude * rad, element.latitude * rad, "YZX"));
-      markers.push(marker);
-      earthObject.earth.add(marker);
-    });
-  },
-      loadRender = function loadRender() {
-    renderer = new base.WebGLRenderer({ antialias: false });
-    renderer.setClearColor(0xf0f0f0);
-    renderer.setSize(CANVAS_WIDTH, CANVAS_HEIGHT, false);
-  },
-      setControls = function setControls() {
-    controls = new OrbitControls(cameraContainer.camera);
-    controls.minDistance = 65;
-    controls.maxDistance = 230;
-    controls.enabled = false;
-  },
-      lights = function lights() {
-    var lightA = new base.DirectionalLight(0xffffff);
-    lightA.position.set(0, 200, 0);
-    objectGroup.add(lightA);
-    var lightB = new base.DirectionalLight(0xffffff);
-    lightB.position.set(200, -200, 0);
-    objectGroup.add(lightB);
-  },
-      updateScene = function updateScene() {
-    if (controls.enabled) {
-      controls.update();
-    }
-    renderer.clear();
-    renderer.render(scene, cameraContainer.camera);
-  },
-      updateTasks = function updateTasks(time) {
-    TWEEN.update(time);
-  },
-      animate = function animate(time) {
-    requestAnimationFrame(animate);
-    updateTasks(time);
-    earthObject.cloudsMesh.rotation.y += 0.0001;
-    updateScene();
-  },
-      setCamera = function setCamera() {
-    cameraContainer.camera = new base.PerspectiveCamera(45, CANVAS_WIDTH / CANVAS_HEIGHT, 1, 100000);
-    cameraContainer.camera.position.set(0, 0, 150);
-    cameraContainer.cameraOriginalPosition = new base.Vector3(cameraContainer.camera.position.x, cameraContainer.camera.position.y, cameraContainer.camera.position.z);
-  },
-      init = function init() {
-    scene = new base.Scene();
-
-    createLoadManager();
-    loadRender();
-    document.getElementsByClassName("render-container")[0].appendChild(renderer.domElement);
-    lights();
-    createGeometry();
-    setCamera();
-    setControls();
-    base.createRunners(base.getData(), cameraContainer, controls);
-    //TWEENS.runners.createTweensByGeoPosition(dataList, cameraContainer);
-    setMarker(base.getData());
-    animate();
-  };
-
-  document.getElementById("start-container").addEventListener("click", function (event) {
-    var parent = document.getElementById("app");
-    parent.querySelectorAll(".is-invisible")[0].classList.remove("is-invisible");
-
-    parent.removeChild(parent.querySelectorAll(".progress-countainer")[0]);
-    base.tweenContainer().runnersContainer[base.tweenContainer().processId].delay(500).start();
-  });
-
-  return {
-    init: init
-  };
-}
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _util = __webpack_require__(1);
-
-Object.defineProperty(exports, "convertLatLonToVec3", {
-  enumerable: true,
-  get: function get() {
-    return _util.convertLatLonToVec3;
-  }
-});
-Object.defineProperty(exports, "createMarker", {
-  enumerable: true,
-  get: function get() {
-    return _util.createMarker;
-  }
-});
-Object.defineProperty(exports, "createPin", {
-  enumerable: true,
-  get: function get() {
-    return _util.createPin;
-  }
-});
-Object.defineProperty(exports, "createSimpleSphere", {
-  enumerable: true,
-  get: function get() {
-    return _util.createSimpleSphere;
-  }
-});
-
-var _tween = __webpack_require__(6);
-
-Object.defineProperty(exports, "createRunners", {
-  enumerable: true,
-  get: function get() {
-    return _tween.createRunners;
-  }
-});
-Object.defineProperty(exports, "tweenContainer", {
-  enumerable: true,
-  get: function get() {
-    return _tween.tweenContainer;
-  }
-});
-
-var _data = __webpack_require__(7);
-
-Object.defineProperty(exports, "getData", {
-  enumerable: true,
-  get: function get() {
-    return _data.getData;
-  }
-});
-
-var _three = __webpack_require__(0);
-
-Object.defineProperty(exports, "Object3D", {
-  enumerable: true,
-  get: function get() {
-    return _three.Object3D;
-  }
-});
-Object.defineProperty(exports, "Scene", {
-  enumerable: true,
-  get: function get() {
-    return _three.Scene;
-  }
-});
-Object.defineProperty(exports, "LoadingManager", {
-  enumerable: true,
-  get: function get() {
-    return _three.LoadingManager;
-  }
-});
-Object.defineProperty(exports, "WebGLRenderer", {
-  enumerable: true,
-  get: function get() {
-    return _three.WebGLRenderer;
-  }
-});
-Object.defineProperty(exports, "DirectionalLight", {
-  enumerable: true,
-  get: function get() {
-    return _three.DirectionalLight;
-  }
-});
-Object.defineProperty(exports, "PerspectiveCamera", {
-  enumerable: true,
-  get: function get() {
-    return _three.PerspectiveCamera;
-  }
-});
-Object.defineProperty(exports, "Vector3", {
-  enumerable: true,
-  get: function get() {
-    return _three.Vector3;
-  }
-});
-Object.defineProperty(exports, "Euler", {
-  enumerable: true,
-  get: function get() {
-    return _three.Euler;
-  }
-});
-
-var _planetMaker = __webpack_require__(8);
-
-Object.defineProperty(exports, "createEarth", {
-  enumerable: true,
-  get: function get() {
-    return _planetMaker.createEarth;
-  }
-});
-Object.defineProperty(exports, "createEarthCloud", {
-  enumerable: true,
-  get: function get() {
-    return _planetMaker.createEarthCloud;
-  }
-});
-Object.defineProperty(exports, "createSkyBox", {
-  enumerable: true,
-  get: function get() {
-    return _planetMaker.createSkyBox;
-  }
-});
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.tweenContainer = tweenContainer;
-exports.createRunners = createRunners;
-var TWEEN = __webpack_require__(2);
-var util = __webpack_require__(1);
-
-var runner = {
-    runnersContainer: [],
-    processId: 0,
-    transitionSpaceSpeed: 4000,
-    transitionToTargetSpeed: 1000
-};
-
-function tweenContainer() {
-    return runner;
-}
-
-function createRunners(dataList, cameraContainer, controls) {
-
-    var radiusToTarget = 1.3,
-        radiusSpaceView = 3.5;
-
-    dataList.forEach(function (element) {
-
-        var targetPosition = util.convertLatLonToVec3(element.latitude, element.longitude, radiusToTarget, radiusSpaceView);
-
-        var goToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, runner.transitionSpaceSpeed).easing(TWEEN.Easing.Quadratic.Out).onStart(function () {
-            enableControl(controls);
-        }).onUpdate(function () {
-            cameraContainer.camera.updateProjectionMatrix();
-        }).onComplete(function () {
-            disableControl(controls);
-        });
-
-        var gotToTargetView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.targetView, runner.transitionToTargetSpeed).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function () {
-            cameraContainer.camera.updateProjectionMatrix();
-        }).onStart(function () {
-            enableControl(controls);
-            if (element.img === undefined) {
-                document.getElementById('target-img').src = "https://bulma.io/images/placeholders/96x96.png";
-            } else {
-                document.getElementById('target-img').src = element.img;
-            }
-        }).onComplete(function () {
-            disableControl(controls);
-            document.getElementById('target-title').innerHTML = element.nameBranch;
-            document.getElementById('target-description').innerHTML = element.description;
-            document.getElementById('target-qt').innerHTML = element.qt;
-            document.getElementById('target-extra').innerHTML = element.extra;
-
-            var parent = document.getElementById("app");
-            parent.querySelectorAll('.data-container')[0].classList.remove("fade-out");
-            parent.querySelectorAll('.data-container')[0].classList.add("fade-in");
-        });
-
-        var backToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, runner.transitionToTargetSpeed).easing(TWEEN.Easing.Quadratic.Out).onStart(function () {
-            enableControl(controls);
-            var parent = document.getElementById("app");
-            parent.querySelectorAll('.data-container')[0].classList.remove("fade-in");
-            parent.querySelectorAll('.data-container')[0].classList.add("fade-out");
-        }).onUpdate(function () {
-            cameraContainer.camera.updateProjectionMatrix();
-        }).onComplete(function () {
-            disableControl(controls);
-            runner.processId += 1;
-
-            if (runner.processId >= dataList.length) {
-                runner.processId = 0;
-            }
-            runner.runnersContainer[runner.processId].start();
-        });
-
-        goToSpaceView.chain(gotToTargetView.chain(backToSpaceView.delay(10000)));
-
-        runner.runnersContainer.push(goToSpaceView);
-    });
-
-    function enableControl(controls) {
-        controls.enabled = true;
-    }
-    function disableControl(controls) {
-        controls.enabled = false;
-    }
-}
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -47606,10 +47663,10 @@ function getData() {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(__dirname) {
+
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.createEarth = createEarth;
 exports.createEarthCloud = createEarthCloud;
@@ -47635,97 +47692,86 @@ var _galaxy_starfield2 = _interopRequireDefault(_galaxy_starfield);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var path = __webpack_require__(13);
-
-var resolvePath = function resolvePath() {
-  var pathToResolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-  return path.resolve(__dirname, pathToResolve);
-};
-
 function createEarth(manager) {
-  var mapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
-  var bumpMapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
-  var specularMapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
+    var mapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
+    var bumpMapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
+    var specularMapLoader = new _three.TextureLoader(manager).load(_worldBig2.default);
 
-  var geometry = new _three.SphereGeometry(50, 32, 32);
-  var material = new _three.MeshPhongMaterial({
-    map: mapLoader,
-    bumpMap: bumpMapLoader,
-    bumpScale: 0.05,
-    shininess: 100,
-    specularMap: specularMapLoader,
-    specular: new _three.Color("grey")
-  });
-  var mesh = new _three.Mesh(geometry, material);
-  return mesh;
+    var geometry = new _three.SphereGeometry(50, 32, 32);
+    var material = new _three.MeshPhongMaterial({
+        map: mapLoader,
+        bumpMap: bumpMapLoader,
+        bumpScale: 0.05,
+        shininess: 100,
+        specularMap: specularMapLoader,
+        specular: new _three.Color("grey")
+    });
+    var mesh = new _three.Mesh(geometry, material);
+    return mesh;
 }
 
 function createEarthCloud(manager) {
-  // create destination canvas
-  var canvasResult = document.createElement("canvas");
-  canvasResult.width = 1024;
-  canvasResult.height = 512;
-  var contextResult = canvasResult.getContext("2d");
+    // create destination canvas
+    var canvasResult = document.createElement("canvas");
+    canvasResult.width = 1024;
+    canvasResult.height = 512;
+    var contextResult = canvasResult.getContext("2d");
 
-  // load earthcloudmap
-  var imageMap = new Image();
-  imageMap.addEventListener("load", function () {
-    // create dataMap ImageData for earthcloudmap
-    var canvasMap = document.createElement("canvas");
-    canvasMap.width = imageMap.width;
-    canvasMap.height = imageMap.height;
-    var contextMap = canvasMap.getContext("2d");
-    contextMap.drawImage(imageMap, 0, 0);
-    var dataMap = contextMap.getImageData(0, 0, canvasMap.width, canvasMap.height);
+    // load earthcloudmap
+    var imageMap = new Image();
+    imageMap.addEventListener("load", function () {
+        // create dataMap ImageData for earthcloudmap
+        var canvasMap = document.createElement("canvas");
+        canvasMap.width = imageMap.width;
+        canvasMap.height = imageMap.height;
+        var contextMap = canvasMap.getContext("2d");
+        contextMap.drawImage(imageMap, 0, 0);
+        var dataMap = contextMap.getImageData(0, 0, canvasMap.width, canvasMap.height);
 
-    // load earthcloudmaptrans
-    var imageTrans = new Image();
-    imageTrans.addEventListener("load", function () {
-      // create dataTrans ImageData for earthcloudmaptrans
-      var canvasTrans = document.createElement("canvas");
-      canvasTrans.width = imageTrans.width;
-      canvasTrans.height = imageTrans.height;
-      var contextTrans = canvasTrans.getContext("2d");
-      contextTrans.drawImage(imageTrans, 0, 0);
-      var dataTrans = contextTrans.getImageData(0, 0, canvasTrans.width, canvasTrans.height);
-      // merge dataMap + dataTrans into dataResult
-      var dataResult = contextMap.createImageData(canvasMap.width, canvasMap.height);
-      for (var y = 0, offset = 0; y < imageMap.height; y++) {
-        for (var x = 0; x < imageMap.width; x++, offset += 4) {
-          dataResult.data[offset + 0] = dataMap.data[offset + 0];
-          dataResult.data[offset + 1] = dataMap.data[offset + 1];
-          dataResult.data[offset + 2] = dataMap.data[offset + 2];
-          dataResult.data[offset + 3] = 255 - dataTrans.data[offset + 0];
-        }
-      }
-      // update texture with result
-      contextResult.putImageData(dataResult, 0, 0);
-      material.map.needsUpdate = true;
-    });
-    imageTrans.src = _earthcloudmaptrans2.default;
-  }, false);
+        // load earthcloudmaptrans
+        var imageTrans = new Image();
+        imageTrans.addEventListener("load", function () {
+            // create dataTrans ImageData for earthcloudmaptrans
+            var canvasTrans = document.createElement("canvas");
+            canvasTrans.width = imageTrans.width;
+            canvasTrans.height = imageTrans.height;
+            var contextTrans = canvasTrans.getContext("2d");
+            contextTrans.drawImage(imageTrans, 0, 0);
+            var dataTrans = contextTrans.getImageData(0, 0, canvasTrans.width, canvasTrans.height);
+            // merge dataMap + dataTrans into dataResult
+            var dataResult = contextMap.createImageData(canvasMap.width, canvasMap.height);
+            for (var y = 0, offset = 0; y < imageMap.height; y++) {
+                for (var x = 0; x < imageMap.width; x++, offset += 4) {
+                    dataResult.data[offset + 0] = dataMap.data[offset + 0];
+                    dataResult.data[offset + 1] = dataMap.data[offset + 1];
+                    dataResult.data[offset + 2] = dataMap.data[offset + 2];
+                    dataResult.data[offset + 3] = 255 - dataTrans.data[offset + 0];
+                }
+            }
+            // update texture with result
+            contextResult.putImageData(dataResult, 0, 0);
+            material.map.needsUpdate = true;
+        });
+        imageTrans.src = _earthcloudmaptrans2.default;
+    }, false);
 
-  imageMap.src = _earthcloudmap2.default;
+    imageMap.src = _earthcloudmap2.default;
 
-  var geometry = new _three.SphereGeometry(50.5, 32, 32);
-  var material = new _three.MeshPhongMaterial({
-    map: new _three.Texture(canvasResult),
-    side: _three.DoubleSide,
-    transparent: true,
-    opacity: 0.8
-  });
-  var mesh = new _three.Mesh(geometry, material);
-  return mesh;
+    var geometry = new _three.SphereGeometry(50.5, 32, 32);
+
+    var material = new _three.MeshPhongMaterial({ map: new _three.Texture(canvasResult), side: _three.DoubleSide, transparent: true, opacity: 0.8 });
+
+    var mesh = new _three.Mesh(geometry, material);
+    return mesh;
 }
 
 function createSkyBox(manager) {
-  var texture = new _three.TextureLoader(manager).load(_galaxy_starfield2.default);
-  var material = new _three.MeshBasicMaterial({ map: texture, side: _three.BackSide });
-  var geometry = new _three.SphereGeometry(1000, 32, 32);
-  var mesh = new _three.Mesh(geometry, material);
-  return mesh;
+    var texture = new _three.TextureLoader(manager).load(_galaxy_starfield2.default);
+    var material = new _three.MeshBasicMaterial({ map: texture, side: _three.BackSide });
+    var geometry = new _three.SphereGeometry(1000, 32, 32);
+    var mesh = new _three.Mesh(geometry, material);
+    return mesh;
 }
-/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ }),
 /* 9 */
@@ -47755,271 +47801,40 @@ module.exports = "dist/bundle/images/galaxy_starfield.png";
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// resolves . and .. elements in a path array with directory names there
-// must be no slashes, empty elements, or device names (c:\) in the array
-// (so also no leading and trailing slashes - it does not distinguish
-// relative and absolute paths)
-function normalizeArray(parts, allowAboveRoot) {
-  // if the path tries to go above the root, `up` ends up > 0
-  var up = 0;
-  for (var i = parts.length - 1; i >= 0; i--) {
-    var last = parts[i];
-    if (last === '.') {
-      parts.splice(i, 1);
-    } else if (last === '..') {
-      parts.splice(i, 1);
-      up++;
-    } else if (up) {
-      parts.splice(i, 1);
-      up--;
-    }
-  }
-
-  // if the path is allowed to go above the root, restore leading ..s
-  if (allowAboveRoot) {
-    for (; up--; up) {
-      parts.unshift('..');
-    }
-  }
-
-  return parts;
-}
-
-// Split a filename into [root, dir, basename, ext], unix version
-// 'root' is just a slash, or nothing.
-var splitPathRe =
-    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
-var splitPath = function(filename) {
-  return splitPathRe.exec(filename).slice(1);
-};
-
-// path.resolve([from ...], to)
-// posix version
-exports.resolve = function() {
-  var resolvedPath = '',
-      resolvedAbsolute = false;
-
-  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-    var path = (i >= 0) ? arguments[i] : process.cwd();
-
-    // Skip empty and invalid entries
-    if (typeof path !== 'string') {
-      throw new TypeError('Arguments to path.resolve must be strings');
-    } else if (!path) {
-      continue;
-    }
-
-    resolvedPath = path + '/' + resolvedPath;
-    resolvedAbsolute = path.charAt(0) === '/';
-  }
-
-  // At this point the path should be resolved to a full absolute path, but
-  // handle relative paths to be safe (might happen when process.cwd() fails)
-
-  // Normalize the path
-  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
-    return !!p;
-  }), !resolvedAbsolute).join('/');
-
-  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
-};
-
-// path.normalize(path)
-// posix version
-exports.normalize = function(path) {
-  var isAbsolute = exports.isAbsolute(path),
-      trailingSlash = substr(path, -1) === '/';
-
-  // Normalize the path
-  path = normalizeArray(filter(path.split('/'), function(p) {
-    return !!p;
-  }), !isAbsolute).join('/');
-
-  if (!path && !isAbsolute) {
-    path = '.';
-  }
-  if (path && trailingSlash) {
-    path += '/';
-  }
-
-  return (isAbsolute ? '/' : '') + path;
-};
-
-// posix version
-exports.isAbsolute = function(path) {
-  return path.charAt(0) === '/';
-};
-
-// posix version
-exports.join = function() {
-  var paths = Array.prototype.slice.call(arguments, 0);
-  return exports.normalize(filter(paths, function(p, index) {
-    if (typeof p !== 'string') {
-      throw new TypeError('Arguments to path.join must be strings');
-    }
-    return p;
-  }).join('/'));
-};
-
-
-// path.relative(from, to)
-// posix version
-exports.relative = function(from, to) {
-  from = exports.resolve(from).substr(1);
-  to = exports.resolve(to).substr(1);
-
-  function trim(arr) {
-    var start = 0;
-    for (; start < arr.length; start++) {
-      if (arr[start] !== '') break;
-    }
-
-    var end = arr.length - 1;
-    for (; end >= 0; end--) {
-      if (arr[end] !== '') break;
-    }
-
-    if (start > end) return [];
-    return arr.slice(start, end - start + 1);
-  }
-
-  var fromParts = trim(from.split('/'));
-  var toParts = trim(to.split('/'));
-
-  var length = Math.min(fromParts.length, toParts.length);
-  var samePartsLength = length;
-  for (var i = 0; i < length; i++) {
-    if (fromParts[i] !== toParts[i]) {
-      samePartsLength = i;
-      break;
-    }
-  }
-
-  var outputParts = [];
-  for (var i = samePartsLength; i < fromParts.length; i++) {
-    outputParts.push('..');
-  }
-
-  outputParts = outputParts.concat(toParts.slice(samePartsLength));
-
-  return outputParts.join('/');
-};
-
-exports.sep = '/';
-exports.delimiter = ':';
-
-exports.dirname = function(path) {
-  var result = splitPath(path),
-      root = result[0],
-      dir = result[1];
-
-  if (!root && !dir) {
-    // No dirname whatsoever
-    return '.';
-  }
-
-  if (dir) {
-    // It has a dirname, strip trailing slash
-    dir = dir.substr(0, dir.length - 1);
-  }
-
-  return root + dir;
-};
-
-
-exports.basename = function(path, ext) {
-  var f = splitPath(path)[2];
-  // TODO: make this comparison case-insensitive on windows?
-  if (ext && f.substr(-1 * ext.length) === ext) {
-    f = f.substr(0, f.length - ext.length);
-  }
-  return f;
-};
-
-
-exports.extname = function(path) {
-  return splitPath(path)[3];
-};
-
-function filter (xs, f) {
-    if (xs.filter) return xs.filter(f);
-    var res = [];
-    for (var i = 0; i < xs.length; i++) {
-        if (f(xs[i], i, xs)) res.push(xs[i]);
-    }
-    return res;
-}
-
-// String.prototype.substr - negative index don't work in IE8
-var substr = 'ab'.substr(-1) === 'b'
-    ? function (str, start, len) { return str.substr(start, len) }
-    : function (str, start, len) {
-        if (start < 0) start = str.length + start;
-        return str.substr(start, len);
-    }
-;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+module.exports = __webpack_require__.p + "models/Pin.obj";
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "models/Pin.obj";
+module.exports = __webpack_require__.p + "style/base.css";
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "style/base.css";
+module.exports = __webpack_require__.p + "style/bulmaswatch.min.css";
 
 /***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "style/bulmaswatch.min.css";
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
 module.exports = __webpack_require__.p + "style/bulma.theme.css";
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = "dist/bundle/images/progress-image.jpg";
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = "dist/bundle/images/favicon.png";
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var THREE = __webpack_require__(0)
