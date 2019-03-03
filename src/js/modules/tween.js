@@ -1,5 +1,5 @@
-var TWEEN = require('@tweenjs/tween.js');
-var util = require('./util');
+import TWEEN from "@tweenjs/tween.js";
+import { convertLatLonToVec3 } from "./loader";
 
 let runner	= {
     runnersContainer : [],
@@ -18,7 +18,7 @@ export function createRunners(dataList, cameraContainer, controls) {
 
     dataList.forEach(function(element) {
   
-        let targetPosition = util.convertLatLonToVec3(element.latitude,element.longitude, radiusToTarget, radiusSpaceView);
+        let targetPosition = convertLatLonToVec3(element.latitude,element.longitude, radiusToTarget, radiusSpaceView);
 
         let goToSpaceView = new TWEEN.Tween(cameraContainer.camera.position).to(targetPosition.spaceViewTarget, runner.transitionSpaceSpeed ).easing(TWEEN.Easing.Quadratic.Out)
         .onStart(function(){enableControl(controls)})
@@ -42,7 +42,7 @@ export function createRunners(dataList, cameraContainer, controls) {
         })
         .onComplete(function(){
             disableControl(controls);
-            document.getElementById('target-title').innerHTML = element.nameBranch;
+            document.getElementById('target-title').innerHTML = element.city;
             document.getElementById('target-description').innerHTML = element.description;
             document.getElementById('target-qt').innerHTML = element.qt;
             document.getElementById('target-extra').innerHTML = element.extra;

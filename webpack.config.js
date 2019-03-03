@@ -4,7 +4,7 @@ const resolvePath = (pathToResolve = "") =>
   path.resolve(__dirname, pathToResolve);
 
 module.exports = {
-  entry: resolvePath("src/js/app.js"),
+  entry: resolvePath("app.js"),
   output: {
     path: resolvePath("dist/bundle/"),
     filename: "geonavigation.bundle.js"
@@ -32,7 +32,7 @@ module.exports = {
               limit: 8000, // Convert images < 8kb to base64 strings
               name: "[name].[ext]",
               outputPath: "/images/",
-              publicPath: "dist/bundle/images/"
+              publicPath: "bundle/images/"
             }
           }
         ]

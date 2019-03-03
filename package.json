@@ -4,7 +4,7 @@
   "description": "Geo navigation using ThreeJs and TweenJS",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "webpack-dev-server --content-base dist --inline",
+    "start": "webpack-dev-server --watch --progress --open --content-base dist --inline",
     "build": "webpack"
   },
   "repository": {
@@ -17,7 +17,9 @@
     "url": "https://github.com/marcelosevergnini/geo-navigation/issues"
   },
   "homepage": "https://github.com/marcelosevergnini/geo-navigation#readme",
-  "dependencies": {},
+  "dependencies": {
+    "firebase": "^5.8.5"
+  },
   "devDependencies": {
     "@tweenjs/tween.js": "^17.2.0",
     "babel-core": "^6.26.0",

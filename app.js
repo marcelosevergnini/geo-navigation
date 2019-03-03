@@ -1,12 +1,14 @@
-import * as base from "../js/modules/loader";
-import { pin } from "../assets/model/Pin.obj";
-import { cssBase } from "../style/base.css";
-import { cssBulma } from "../style/bulmaswatch.min.css";
-import { cssBulmaTheme } from "../style/bulma.theme.css";
-import { image } from "../assets/textures/progress-image.jpg";
-import { favicon } from "../assets/textures/favicon.png";
-const OrbitControls = require("three-orbitcontrols");
-const TWEEN = require("@tweenjs/tween.js");
+import * as base from "./src/js/modules/loader";
+import { pin } from "./src/assets/model/Pin.obj";
+import { cssBase } from "./src/style/base.css";
+import { cssBulma } from "./src/style/bulmaswatch.min.css";
+import { cssBulmaTheme } from "./src/style/bulma.theme.css";
+import { image } from "./src/assets/textures/progress-image.jpg";
+import { favicon } from "./src/assets/textures/favicon.png";
+import TWEEN from "@tweenjs/tween.js";
+import OrbitControls from 'three-orbitcontrols';
+import firebase from 'firebase/app';
+import '@firebase/database';
 
 geoNavigation().init();
 
@@ -22,6 +24,16 @@ export function geoNavigation() {
   let loadManager;
   let progress = {};
   let renderContainer; 
+  var config = {
+    apiKey: "AIzaSyCT5kOaMh_s0w16M9S1cNLlIn6mCrfhWJ8",
+    authDomain: "geo-navigation.firebaseapp.com",
+    databaseURL: "https://geo-navigation.firebaseio.com",
+    projectId: "geo-navigation",
+    storageBucket: "geo-navigation.appspot.com",
+    messagingSenderId: "856376774252"
+  };
+  firebase.initializeApp(config);
+  
 
   let createLoadManager = function() {
       
@@ -56,7 +68,7 @@ export function geoNavigation() {
       listBranchList.forEach(function(element) {
           //let marker = base.createPin(loadManager, 0.002, 0.002, 0.002, pin);
           let marker = base.createMarker();
-          marker.name = element.nameBranch.replace(/ /g, "-").toLowerCase();
+          marker.name = element.city.replace(/ /g, "-").toLowerCase();
           marker.quaternion.setFromEuler(new base.Euler(0, element.longitude * rad, element.latitude * rad, "YZX"));
           earthObject.earth.add(marker);
       });
@@ -108,17 +120,25 @@ export function geoNavigation() {
     },
     init = function() {
 
+      var db = firebase.database();
+      var ref = db.ref("/marked-places/places");
+  
         if (base.Detector) {
-          scene = new base.Scene();
-          createLoadManager();
-          loadRender();
-          lights();
-          createGeometry();
-          setCamera();
-          setControls();
-          base.createRunners(base.getData(), cameraContainer, controls);
-          setMarker(base.getData());
-          animate();
+
+          ref.once("value", function(snapshot) {
+            var data = snapshot.val();   //Data is in JSON format.
+            scene = new base.Scene();
+            createLoadManager();
+            loadRender();
+            lights();
+            createGeometry();
+            setCamera();
+            setControls();
+            base.createRunners(data, cameraContainer, controls);
+            setMarker(data);
+            animate();
+            
+          });          
         } else {
           var warning = base.Detector.getWebGLErrorMessage();
           renderContainer.appendChild(warning);
