@@ -17,7 +17,7 @@ What I have earned.
 
 Usage.
 
-  * Recomended Node version 10.16.0
+  * Recomended Node version ```10.16.0```
   * To install dependecies: ```npm install```
   * To run the project execute: ```npm start```
 
