@@ -21,6 +21,11 @@ Usage.
   * To install dependecies: ```npm install```
   * To run the project execute: ```npm start```
 
+Branchs:
+
+ * master: Latest features implemented
+ * gh-pages: Bundle generated with webpack, running as GitHub Pages
+ * feature/node-convertion: branch used for the migration from Javascript to Modules 
 
 Geo Navigation Demo: [Click Here](https://marcelosevergnini.github.io/geo-navigation)
 
