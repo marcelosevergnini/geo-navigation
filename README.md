@@ -1,7 +1,7 @@
 # Planet Geo Navigation 
 
 
-WebGL application that use geographic coordinate to navigate.
+WebGL application that use geographic coordinate system as base to navigate.
 
 This app uses ThreeJS Library to manipulate WebGl and TweenJS to animate the transitions between locations, eather in the space view or the geo cordinates.
 
