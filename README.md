@@ -27,9 +27,16 @@ Branchs:
  * gh-pages: Bundle generated with webpack, running as GitHub Pages
  * feature/node-convertion: branch used for the migration from Javascript to Modules 
 
+
+
 Geo Navigation Demo: [Click Here](https://marcelosevergnini.github.io/geo-navigation)
 
-![](name-of-giphy.gif)
+
+<!DOCTYPE html>
+<html>
+    <iframe class="iframe" id='myFrame' src='https://marcelosevergnini.github.io/geo-navigation/' width='100%' height='800px' frameBorder="0" scrolling="no"/>
+</html>
+
 
 OBS.
   A new version is being developed in the bbrand repo. 
