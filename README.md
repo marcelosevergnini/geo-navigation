@@ -10,7 +10,7 @@ Webpack is used for module bundler.
 BulmaCSS is being used for component layout.
 
 
-What I have earned.
+What I have learned.
   * How to work in WebGL
   * How to integrate ThreeJS with another library.
   * Consuming data from Firebase (realtime database)
